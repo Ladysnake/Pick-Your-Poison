@@ -1,0 +1,41 @@
+{
+  "parent": "pickyourpoison:husbandry/taste_test",
+  "display": {
+    "icon": {
+      "item": "pickyourpoison:golden_poison_dart_frog_bowl"
+    },
+    "title": {
+      "translate": "pickyourpoison:advancements.husbandry.taste_the_rainbow.title"
+    },
+    "description": {
+      "translate": "pickyourpoison:advancements.husbandry.taste_the_rainbow.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "rewards": {
+    "experience": 50
+  },
+  "criteria": {
+    "all_effects": {
+      "trigger": "minecraft:effects_changed",
+      "conditions": {
+        "effects": {
+          "pickyourpoison:stimulation": {},
+          "pickyourpoison:comatose": {},
+          "pickyourpoison:batrachotoxin": {},
+          "pickyourpoison:torpor": {},
+          "pickyourpoison:numbness": {},
+          "pickyourpoison:vulnerability": {}
+        }
+      }
+    }
+  },
+  "requirements": [
+    [
+      "all_effects"
+    ]
+  ]
+}

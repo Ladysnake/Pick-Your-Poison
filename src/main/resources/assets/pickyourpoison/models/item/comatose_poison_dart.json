@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "pickyourpoison:item/comatose_throwing_dart"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "ladysnake.pickyourpoison.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "EntityNavigationMixin",
+    "HungerManagerMixin",
+    "LivingEntityMixin",
+    "LookControlMixin",
+    "MobEntityMixin",
+    "PersistentProjectileEntityMixin",
+    "PlayerEntityFromLivingEntityMixin"
+  ],
+  "client": [
+    "ClientPlayerEntityMixin",
+    "InGameHudMixin",
+    "KeyboardMixin",
+    "MouseMixin",
+    "PlayerEntityRendererMixin",
+    "HeadFeatureRendererMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

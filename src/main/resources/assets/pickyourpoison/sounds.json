@@ -1,0 +1,62 @@
+{
+  "entity.poison_dart_frog.ambient": {
+    "sounds": [
+      "pickyourpoison:mob/poison_dart_frog/ambient1",
+      "pickyourpoison:mob/poison_dart_frog/ambient2",
+      "pickyourpoison:mob/poison_dart_frog/ambient3",
+      "pickyourpoison:mob/poison_dart_frog/ambient4"
+    ],
+    "subtitle": "pickyourpoison.subtitles.entity.poison_dart_frog.ambient"
+  },
+  "entity.poison_dart_frog.hurt": {
+    "sounds": [
+      "pickyourpoison:mob/poison_dart_frog/hurt1",
+      "pickyourpoison:mob/poison_dart_frog/hurt2",
+      "pickyourpoison:mob/poison_dart_frog/hurt3"
+    ],
+    "subtitle": "pickyourpoison.subtitles.entity.poison_dart_frog.hurt"
+  },
+  "entity.poison_dart_frog.death": {
+    "sounds": [
+      "pickyourpoison:mob/poison_dart_frog/death1",
+      "pickyourpoison:mob/poison_dart_frog/death2"
+    ],
+    "subtitle": "pickyourpoison.subtitles.entity.poison_dart_frog.death"
+  },
+  "entity.poison_dart.hit": {
+    "sounds": [
+      "pickyourpoison:entity/poison_dart/hit1"
+    ],
+    "subtitle": "pickyourpoison.subtitles.entity.poison_dart.hit"
+  },
+  "item.poison_dart_frog_bowl.fill": {
+    "sounds": [
+      "pickyourpoison:item/poison_dart_frog_bowl/fill1"
+    ],
+    "subtitle": "pickyourpoison.subtitles.item.poison_dart_frog_bowl.fill"
+  },
+  "item.poison_dart_frog_bowl.empty": {
+    "sounds": [
+      "pickyourpoison:item/poison_dart_frog_bowl/empty1"
+    ],
+    "subtitle": "pickyourpoison.subtitles.item.poison_dart_frog_bowl.empty"
+  },
+  "item.poison_dart_frog_bowl.lick": {
+    "sounds": [
+      "pickyourpoison:item/poison_dart_frog_bowl/lick1"
+    ],
+    "subtitle": "pickyourpoison.subtitles.item.poison_dart_frog_bowl.lick"
+  },
+  "item.poison_dart.coat": {
+    "sounds": [
+      "pickyourpoison:item/poison_dart/coat1"
+    ],
+    "subtitle": "pickyourpoison.subtitles.item.poison_dart.coat"
+  },
+  "item.poison_dart.throw": {
+    "sounds": [
+      "pickyourpoison:item/poison_dart/throw1"
+    ],
+    "subtitle": "pickyourpoison.subtitles.item.poison_dart.throw"
+  }
+}

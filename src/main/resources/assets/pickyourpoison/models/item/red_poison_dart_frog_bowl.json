@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "pickyourpoison:item/red_poison_dart_frog_bowl"
+  }
+}

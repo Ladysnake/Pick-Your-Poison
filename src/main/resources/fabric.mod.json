@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "id": "pickyourpoison",
+  "version": "${version}",
+
+  "name": "Pick Your Poison",
+  "description": "Poison dart frogs, new potion effects and poison darts!",
+  "authors": [
+    "doctor4t"
+  ],
+
+  "license": "ARR",
+  "icon": "assets/pickyourpoison/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "ladysnake.pickyourpoison.common.PickYourPoison"
+    ],
+    "client": [
+      "ladysnake.pickyourpoison.client.PickYourPoisonClient"
+    ],
+    "cardinal-components-entity": [
+      "ladysnake.pickyourpoison.cca.PickYourPoisonEntityComponents"
+    ]
+  },
+  "mixins": [
+    "pickyourpoison.mixins.json"
+  ],
+  "accessWidener": "pickyourpoison.accesswidener",
+
+  "depends": {
+    "fabricloader": ">=0.12.12",
+    "fabric": "*",
+    "minecraft": "1.18.x",
+    "java": ">=17"
+  },
+  "custom": {
+    "cardinal-components": [
+      "pickyourpoison:numbnessdamage",
+      "pickyourpoison:frograin"
+    ]
+  }
+}
