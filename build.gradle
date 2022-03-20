@@ -210,8 +210,6 @@ curseforge {
 	}
 }
 
-tasks.curseforge.dependsOn(checkGitStatus)
-
 task release(dependsOn: [tasks.githubRelease, tasks.curseforge]) {
 	group = 'publishing'
 	description = 'Releases a new version to Github and Curseforge'
