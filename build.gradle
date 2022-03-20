@@ -1,18 +1,24 @@
 plugins {
 	id 'fabric-loom' version '0.11-SNAPSHOT'
 	id 'maven-publish'
-}
-
-loom {
-	accessWidenerPath = file("src/main/resources/pickyourpoison.accesswidener")
+	id 'com.matthewprenger.cursegradle' version '1.4.0'
+	id 'org.ajoberstar.grgit' version '3.1.1'
+	id 'com.github.breadmoirai.github-release' version '2.2.12'
 }
 
 sourceCompatibility = JavaVersion.VERSION_17
 targetCompatibility = JavaVersion.VERSION_17
+// Adds a few utility methods like getProjectProperty
+apply from: 'https://raw.githubusercontent.com/NerdHubMC/Gradle-Scripts/master/scripts/utilities.gradle'
+apply from: 'https://raw.githubusercontent.com/NerdHubMC/Gradle-Scripts/master/scripts/fabric/publish/changelog.gradle'
 
 archivesBaseName = project.archives_base_name
 version = project.mod_version
 group = project.maven_group
+
+loom {
+	accessWidenerPath = file("src/main/resources/pickyourpoison.accesswidener")
+}
 
 repositories {
 	maven { url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
@@ -56,38 +62,43 @@ processResources {
 	}
 }
 
-tasks.withType(JavaCompile).configureEach {
-	// Minecraft 1.18 (1.18-pre2) upwards uses Java 17.
-	it.options.release = 17
+// ensure that the encoding is set to UTF-8, no matter what the system default is
+// this fixes some edge cases with special characters not displaying correctly
+// see http://yodaconditions.net/blog/fix-for-java-file-encoding-problems-with-gradle.html
+tasks.withType(JavaCompile) {
+	options.encoding = "UTF-8"
 }
 
-java {
-	// Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
-	// if it is present.
-	// If you remove this line, sources will not be generated.
-	withSourcesJar()
+// Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
+// if it is present.
+// If you remove this task, sources will not be generated.
+task sourcesJar(type: Jar, dependsOn: classes) {
+	classifier = "sources"
+	from sourceSets.main.allSource
 }
 
 jar {
-	from("LICENSE") {
-		rename { "${it}_${project.archivesBaseName}"}
-	}
+	from "LICENSE"
 }
 
 // configure the maven publication
 publishing {
 	publications {
 		mavenJava(MavenPublication) {
-			from components.java
+			// add all the jars that should be included when publishing to maven
+			artifact(remapJar) {
+				builtBy remapJar
+			}
+			artifact(sourcesJar) {
+				builtBy remapSourcesJar
+			}
 		}
 	}
 
-	// See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
+	// select the repositories you want to publish to
 	repositories {
-		// Add repositories to publish to here.
-		// Notice: This block does NOT have the same function as the block in the top level.
-		// The repositories here will be used for publishing your artifact, not for
-		// retrieving dependencies.
+		// uncomment to publish to the local maven
+		// mavenLocal()
 	}
 }
 
@@ -116,7 +127,7 @@ task checkGitStatus() {
 }
 
 githubRelease {
-	repo "Pick Your Poison"
+	repo "Illuminations"
 	token "${getProjectProperty('github_releases_token')}"
 	// default owner: last component of maven group
 	// default repo: name of the project
