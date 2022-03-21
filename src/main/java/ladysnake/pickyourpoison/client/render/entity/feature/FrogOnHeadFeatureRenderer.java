@@ -1,5 +1,6 @@
 package ladysnake.pickyourpoison.client.render.entity.feature;
 
+import ladysnake.pickyourpoison.client.PickYourPoisonClient;
 import ladysnake.pickyourpoison.client.render.model.FrogOnHeadModel;
 import ladysnake.pickyourpoison.common.PickYourPoison;
 import ladysnake.pickyourpoison.common.item.PoisonDartFrogBowlItem;
@@ -25,7 +26,7 @@ public class FrogOnHeadFeatureRenderer extends FeatureRenderer<AbstractClientPla
 
     @Override
     public void render(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, AbstractClientPlayerEntity entity, float limbAngle, float limbDistance, float tickDelta, float animationProgress, float headYaw, float headPitch) {
-        if (!entity.isInvisible() && PickYourPoison.FROGGY_PLAYERS.contains(entity.getUuid())) {
+        if (!entity.isInvisible() && PickYourPoisonClient.FROGGY_PLAYERS_CLIENT.contains(entity.getUuid())) {
             Item item = entity.getEquippedStack(EquipmentSlot.HEAD).getItem();
             if (item instanceof PoisonDartFrogBowlItem poisonDartFrogBowlItem) {
                 matrices.push();

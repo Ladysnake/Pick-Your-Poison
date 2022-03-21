@@ -26,6 +26,10 @@ repositories {
 		name = 'Ladysnake Mods'
 		url = 'https://ladysnake.jfrog.io/artifactory/mods'
 	}
+	maven {
+		name = "TerraformersMC"
+		url = "https://maven.terraformersmc.com/"
+	}
 }
 
 dependencies {
@@ -50,6 +54,8 @@ dependencies {
 	// Includes Cardinal Components API as a Jar-in-Jar dependency (optional)
 	include "dev.onyxstudios.cardinal-components-api:cardinal-components-base:4.1.3"
 	include "dev.onyxstudios.cardinal-components-api:cardinal-components-entity:4.1.3"
+
+	modImplementation "dev.emi:trinkets:${trinkets_version}"
 
 	implementation 'org.json:json:20211205'
 	include 'org.json:json:20211205'

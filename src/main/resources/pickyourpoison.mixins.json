@@ -10,15 +10,15 @@
     "LookControlMixin",
     "MobEntityMixin",
     "PersistentProjectileEntityMixin",
-    "PlayerEntityFromLivingEntityMixin"
+    "PlayerEntityFromLivingEntityMixin"z
   ],
   "client": [
     "ClientPlayerEntityMixin",
+    "HeadFeatureRendererMixin",
     "InGameHudMixin",
     "KeyboardMixin",
     "MouseMixin",
-    "PlayerEntityRendererMixin",
-    "HeadFeatureRendererMixin"
+    "PlayerEntityRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

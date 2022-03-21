@@ -12,6 +12,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.block.dispenser.ProjectileDispenserBehavior;
 import net.minecraft.entity.*;
@@ -36,23 +37,24 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.world.Heightmap;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 import software.bernie.geckolib3.GeckoLib;
 
 import java.io.*;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Properties;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executor;
 
 public class PickYourPoison implements ModInitializer {
     public static final String MODID = "pickyourpoison";
-    private static final String FROGGY_PLAYERS_URL = "http://doctor4t.uuid.gg/pyp-data";
+    private static final String FROGGY_PLAYERS_URL = "https://doctor4t.uuid.gg/pyp-data";
     public static final ArrayList<UUID> FROGGY_PLAYERS = new ArrayList<>();
+
+    public static boolean isTrinketsLoaded;
 
     // STATUS EFFECTS
     public static final StatusEffect VULNERABILITY = registerStatusEffect("vulnerability", new EmptyStatusEffect(StatusEffectCategory.HARMFUL, 0xFF891C));
@@ -66,13 +68,13 @@ public class PickYourPoison implements ModInitializer {
     public static EntityType<PoisonDartEntity> POISON_DART;
     // ITEMS
     public static Item POISON_DART_FROG_SPAWN_EGG;
-    public static Item BLUE_POISON_DART_FROG_BOWL;
-    public static Item GOLDEN_POISON_DART_FROG_BOWL;
-    public static Item GREEN_POISON_DART_FROG_BOWL;
-    public static Item ORANGE_POISON_DART_FROG_BOWL;
-    public static Item CRIMSON_POISON_DART_FROG_BOWL;
-    public static Item RED_POISON_DART_FROG_BOWL;
-    public static Item LUXALAMANDER_BOWL;
+    public static PoisonDartFrogBowlItem BLUE_POISON_DART_FROG_BOWL;
+    public static PoisonDartFrogBowlItem GOLDEN_POISON_DART_FROG_BOWL;
+    public static PoisonDartFrogBowlItem GREEN_POISON_DART_FROG_BOWL;
+    public static PoisonDartFrogBowlItem ORANGE_POISON_DART_FROG_BOWL;
+    public static PoisonDartFrogBowlItem CRIMSON_POISON_DART_FROG_BOWL;
+    public static PoisonDartFrogBowlItem RED_POISON_DART_FROG_BOWL;
+    public static PoisonDartFrogBowlItem LUXALAMANDER_BOWL;
     public static Item THROWING_DART;
     public static Item COMATOSE_POISON_DART;
     public static Item BATRACHOTOXIN_POISON_DART;
@@ -96,7 +98,7 @@ public class PickYourPoison implements ModInitializer {
         return Registry.register(Registry.ENTITY_TYPE, new Identifier(MODID, name), entityType);
     }
 
-    public static Item registerItem(String name, Item item) {
+    public static <T extends Item> T registerItem(String name, T item) {
         Registry.register(Registry.ITEM, new Identifier(MODID, name), item);
         return item;
     }
@@ -135,7 +137,12 @@ public class PickYourPoison implements ModInitializer {
     public void onInitialize() {
         GeckoLib.initialize();
 
-        ServerLifecycleEvents.SERVER_STARTING.register(server -> loadPlayerCosmetics(server));
+        // is trinkets loaded?
+        isTrinketsLoaded = FabricLoader.getInstance().isModLoaded("trinkets");
+
+        // FROGGY COSMETICS
+        ServerLifecycleEvents.SERVER_STARTING.register(server -> new FroggyPlayerListLoaderThread().start());
+        ServerLifecycleEvents.SERVER_STOPPING.register(server -> FROGGY_PLAYERS.clear());
 
         // ENTITIES
         POISON_DART_FROG = registerEntity("poison_dart_frog", FabricEntityTypeBuilder.createMob().entityFactory(PoisonDartFrogEntity::new).spawnGroup(SpawnGroup.CREATURE).dimensions(EntityDimensions.changing(0.5F, 0.4F)).trackRangeBlocks(8).spawnRestriction(SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING, PoisonDartFrogEntity::canMobSpawn).build());
@@ -205,24 +212,39 @@ public class PickYourPoison implements ModInitializer {
         }
     }
 
-    public static void loadPlayerCosmetics(Executor executor) {
-        // get illuminations player cosmetics
-        CompletableFuture.supplyAsync(() -> {
-            try {
-                return JsonReader.readJsonFromUrl(FROGGY_PLAYERS_URL);
-            } catch (IOException ignored) {
-                System.out.println(ignored);
-            }
+    private static class FroggyPlayerListLoaderThread extends Thread {
+        public FroggyPlayerListLoaderThread() {
+            setName("Pick Your Poison Equippable Frogs Thread");
+            setDaemon(true);
+        }
 
-            return null;
-        }).exceptionally(throwable -> {
-            System.out.println(throwable);
-            return null;
-        }).thenAcceptAsync(playerData -> {
-            for (Object o : playerData.toList()) {
-                FROGGY_PLAYERS.add(UUID.fromString((String) o));
+        @Override
+        public void run() {
+            try (BufferedInputStream stream = IOUtils.buffer(new URL(FROGGY_PLAYERS_URL).openStream())) {
+                Properties properties = new Properties();
+                properties.load(stream);
+                synchronized (FROGGY_PLAYERS) {
+                    FROGGY_PLAYERS.clear();
+                    for (Object o : JsonReader.readJsonFromUrl(FROGGY_PLAYERS_URL).toList()) {
+                        FROGGY_PLAYERS.add(UUID.fromString((String) o));
+                    }
+//                    System.out.println(FROGGY_PLAYERS);
+                }
+            } catch (IOException e) {
+                System.out.println("Failed to load froggy list.");
             }
-            System.out.println(FROGGY_PLAYERS);
-        }, executor);
+        }
+    }
+
+    public static PoisonDartFrogBowlItem[] getAllFrogBowls() {
+        return new PoisonDartFrogBowlItem[]{
+                PickYourPoison.BLUE_POISON_DART_FROG_BOWL,
+                PickYourPoison.RED_POISON_DART_FROG_BOWL,
+                PickYourPoison.CRIMSON_POISON_DART_FROG_BOWL,
+                PickYourPoison.GREEN_POISON_DART_FROG_BOWL,
+                PickYourPoison.GOLDEN_POISON_DART_FROG_BOWL,
+                PickYourPoison.ORANGE_POISON_DART_FROG_BOWL,
+                PickYourPoison.LUXALAMANDER_BOWL
+        };
     }
 }

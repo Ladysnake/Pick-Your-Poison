@@ -103,11 +103,6 @@ public abstract class LivingEntityMixin extends Entity {
         if (this.hasStatusEffect(PickYourPoison.COMATOSE) && this.age % (40 / (MathHelper.clamp(this.getStatusEffect(PickYourPoison.COMATOSE).getAmplifier() + 1, 1, 40))) == 0) {
             this.heal(1);
         }
-
-        if (this.getEquippedStack(EquipmentSlot.HEAD).getItem() instanceof PoisonDartFrogBowlItem && !PickYourPoison.FROGGY_PLAYERS.contains(this.getUuid())) {
-            this.dropStack(this.getEquippedStack(EquipmentSlot.HEAD));
-            this.equipStack(EquipmentSlot.HEAD, ItemStack.EMPTY);
-        }
     }
 
     @ModifyVariable(method = "damage", at = @At("HEAD"))

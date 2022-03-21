@@ -1,13 +1,13 @@
 package ladysnake.pickyourpoison.common.item;
 
+import dev.emi.trinkets.api.SlotReference;
+import dev.emi.trinkets.api.TrinketsApi;
 import ladysnake.pickyourpoison.common.PickYourPoison;
 import ladysnake.pickyourpoison.common.entity.PoisonDartFrogEntity;
 import net.minecraft.advancement.criterion.Criteria;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.FluidFillable;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.Fluids;
 import net.minecraft.item.*;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
@@ -19,6 +19,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
+
+import java.util.List;
+import java.util.function.Consumer;
 
 public class PoisonDartFrogBowlItem extends Item {
     public final Identifier texture;
@@ -76,7 +79,7 @@ public class PoisonDartFrogBowlItem extends Item {
             Direction direction = blockHitResult.getSide();
             BlockPos blockPos2 = blockPos.offset(direction);
 
-            poisonDartFrog.setPosition(blockPos2.getX()+.5f, blockPos2.getY(), blockPos2.getZ()+.5f);
+            poisonDartFrog.setPosition(blockPos2.getX() + .5f, blockPos2.getY(), blockPos2.getZ() + .5f);
             poisonDartFrog.setPoisonDartFrogType(type);
             poisonDartFrog.fromBowl = true;
 
