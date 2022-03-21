@@ -33,7 +33,8 @@
     "fabricloader": ">=0.12.12",
     "fabric": "*",
     "minecraft": "1.18.x",
-    "java": ">=17"
+    "java": ">=17",
+    "geckolib3": "*"
   },
   "custom": {
     "cardinal-components": [

@@ -69,9 +69,11 @@ public abstract class LivingEntityMixin extends Entity {
     @Shadow
     public abstract void heal(float amount);
 
-    @Shadow public abstract ItemStack getEquippedStack(EquipmentSlot slot);
+    @Shadow
+    public abstract ItemStack getEquippedStack(EquipmentSlot slot);
 
-    @Shadow public abstract void equipStack(EquipmentSlot slot, ItemStack stack);
+    @Shadow
+    public abstract void equipStack(EquipmentSlot slot, ItemStack stack);
 
     @Inject(method = "canSee", at = @At("HEAD"), cancellable = true)
     public void canSee(Entity entity, CallbackInfoReturnable<Boolean> callbackInfoReturnable) {

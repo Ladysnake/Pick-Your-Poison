@@ -2,6 +2,7 @@
 
 ### Pick Your Poison 1.0.2 - 1.18.1
 - Fixed a crash if Trinkets isn't installed
+- Made it so the helmet doesn't render if the player has a frog in the trinket slot (if Trinkets is installed)
 
 ### Pick Your Poison 1.0.1 - 1.18.1
 - Fixed a crash happening on dedicated servers

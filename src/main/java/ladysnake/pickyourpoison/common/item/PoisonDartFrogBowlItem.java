@@ -1,11 +1,8 @@
 package ladysnake.pickyourpoison.common.item;
 
-import dev.emi.trinkets.api.SlotReference;
-import dev.emi.trinkets.api.TrinketsApi;
 import ladysnake.pickyourpoison.common.PickYourPoison;
 import ladysnake.pickyourpoison.common.entity.PoisonDartFrogEntity;
 import net.minecraft.advancement.criterion.Criteria;
-import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
@@ -19,9 +16,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
-
-import java.util.List;
-import java.util.function.Consumer;
 
 public class PoisonDartFrogBowlItem extends Item {
     public final Identifier texture;

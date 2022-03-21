@@ -2,7 +2,6 @@ package ladysnake.pickyourpoison.client.render.entity.feature;
 
 import ladysnake.pickyourpoison.client.PickYourPoisonClient;
 import ladysnake.pickyourpoison.client.render.model.FrogOnHeadModel;
-import ladysnake.pickyourpoison.common.PickYourPoison;
 import ladysnake.pickyourpoison.common.item.PoisonDartFrogBowlItem;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.render.OverlayTexture;

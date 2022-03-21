@@ -8,7 +8,6 @@ import ladysnake.pickyourpoison.common.statuseffect.EmptyStatusEffect;
 import ladysnake.pickyourpoison.common.statuseffect.NumbnessStatusEffect;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
@@ -37,7 +36,6 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.world.Heightmap;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import software.bernie.geckolib3.GeckoLib;
@@ -45,24 +43,19 @@ import software.bernie.geckolib3.GeckoLib;
 import java.io.*;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Properties;
-import java.util.UUID;
 
 public class PickYourPoison implements ModInitializer {
     public static final String MODID = "pickyourpoison";
-    private static final String FROGGY_PLAYERS_URL = "https://doctor4t.uuid.gg/pyp-data";
-//    public static final ArrayList<UUID> FROGGY_PLAYERS = new ArrayList<>();
-
-    public static boolean isTrinketsLoaded;
-
     // STATUS EFFECTS
     public static final StatusEffect VULNERABILITY = registerStatusEffect("vulnerability", new EmptyStatusEffect(StatusEffectCategory.HARMFUL, 0xFF891C));
+//    public static final ArrayList<UUID> FROGGY_PLAYERS = new ArrayList<>();
     public static final StatusEffect COMATOSE = registerStatusEffect("comatose", new EmptyStatusEffect(StatusEffectCategory.HARMFUL, 0x35A2F3));
     public static final StatusEffect NUMBNESS = registerStatusEffect("numbness", new NumbnessStatusEffect(StatusEffectCategory.HARMFUL, 0x62B229));
     public static final StatusEffect TORPOR = registerStatusEffect("torpor", new EmptyStatusEffect(StatusEffectCategory.HARMFUL, 0xD8C0B8));
     public static final StatusEffect BATRACHOTOXIN = registerStatusEffect("batrachotoxin", new EmptyStatusEffect(StatusEffectCategory.HARMFUL, 0xEAD040));
     public static final StatusEffect STIMULATION = registerStatusEffect("stimulation", new EmptyStatusEffect(StatusEffectCategory.HARMFUL, 0xD85252).addAttributeModifier(EntityAttributes.GENERIC_MOVEMENT_SPEED, "91AEAA56-376B-4498-935B-2F7F68070635", 0.2f, EntityAttributeModifier.Operation.MULTIPLY_TOTAL));
+    private static final String FROGGY_PLAYERS_URL = "https://doctor4t.uuid.gg/pyp-data";
+    public static boolean isTrinketsLoaded;
     // ENTITIES
     public static EntityType<PoisonDartFrogEntity> POISON_DART_FROG;
     public static EntityType<PoisonDartEntity> POISON_DART;
@@ -132,6 +125,18 @@ public class PickYourPoison implements ModInitializer {
         return effect;
     }
 
+    public static PoisonDartFrogBowlItem[] getAllFrogBowls() {
+        return new PoisonDartFrogBowlItem[]{
+                PickYourPoison.BLUE_POISON_DART_FROG_BOWL,
+                PickYourPoison.RED_POISON_DART_FROG_BOWL,
+                PickYourPoison.CRIMSON_POISON_DART_FROG_BOWL,
+                PickYourPoison.GREEN_POISON_DART_FROG_BOWL,
+                PickYourPoison.GOLDEN_POISON_DART_FROG_BOWL,
+                PickYourPoison.ORANGE_POISON_DART_FROG_BOWL,
+                PickYourPoison.LUXALAMANDER_BOWL
+        };
+    }
+
     // INIT
     @Override
     public void onInitialize() {
@@ -192,26 +197,6 @@ public class PickYourPoison implements ModInitializer {
         });
     }
 
-
-    public static class JsonReader {
-        private static String readAll(Reader rd) throws IOException {
-            StringBuilder sb = new StringBuilder();
-            int cp;
-            while ((cp = rd.read()) != -1) {
-                sb.append((char) cp);
-            }
-            return sb.toString();
-        }
-
-        public static JSONArray readJsonFromUrl(String url) throws IOException, JSONException {
-            try (InputStream is = new URL(url).openStream()) {
-                BufferedReader rd = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
-                String jsonText = readAll(rd);
-                return new JSONArray(jsonText);
-            }
-        }
-    }
-
 //    private static class FroggyPlayerListLoaderThread extends Thread {
 //        public FroggyPlayerListLoaderThread() {
 //            setName("Pick Your Poison Equippable Frogs Thread");
@@ -236,15 +221,22 @@ public class PickYourPoison implements ModInitializer {
 //        }
 //    }
 
-    public static PoisonDartFrogBowlItem[] getAllFrogBowls() {
-        return new PoisonDartFrogBowlItem[]{
-                PickYourPoison.BLUE_POISON_DART_FROG_BOWL,
-                PickYourPoison.RED_POISON_DART_FROG_BOWL,
-                PickYourPoison.CRIMSON_POISON_DART_FROG_BOWL,
-                PickYourPoison.GREEN_POISON_DART_FROG_BOWL,
-                PickYourPoison.GOLDEN_POISON_DART_FROG_BOWL,
-                PickYourPoison.ORANGE_POISON_DART_FROG_BOWL,
-                PickYourPoison.LUXALAMANDER_BOWL
-        };
+    public static class JsonReader {
+        private static String readAll(Reader rd) throws IOException {
+            StringBuilder sb = new StringBuilder();
+            int cp;
+            while ((cp = rd.read()) != -1) {
+                sb.append((char) cp);
+            }
+            return sb.toString();
+        }
+
+        public static JSONArray readJsonFromUrl(String url) throws IOException, JSONException {
+            try (InputStream is = new URL(url).openStream()) {
+                BufferedReader rd = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
+                String jsonText = readAll(rd);
+                return new JSONArray(jsonText);
+            }
+        }
     }
 }

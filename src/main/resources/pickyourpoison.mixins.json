@@ -18,7 +18,8 @@
     "InGameHudMixin",
     "KeyboardMixin",
     "MouseMixin",
-    "PlayerEntityRendererMixin"
+    "PlayerEntityRendererMixin",
+    "ArmorFeatureRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1
