@@ -153,7 +153,7 @@ public class PickYourPoison implements ModInitializer {
         POISON_DART_FROG = registerEntity("poison_dart_frog", FabricEntityTypeBuilder.createMob().entityFactory(PoisonDartFrogEntity::new).spawnGroup(SpawnGroup.CREATURE).dimensions(EntityDimensions.changing(0.5F, 0.4F)).trackRangeBlocks(8).spawnRestriction(SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING, PoisonDartFrogEntity::canMobSpawn).build());
         FabricDefaultAttributeRegistry.register(POISON_DART_FROG, PoisonDartFrogEntity.createPoisonDartFrogAttributes());
         BiomeModifications.addSpawn(
-                biome -> biome.getBiome().getCategory().equals(Biome.Category.JUNGLE),
+                biome -> Biome.getCategory(biome.getBiomeRegistryEntry()).equals(Biome.Category.JUNGLE),
                 SpawnGroup.CREATURE, POISON_DART_FROG, 50, 2, 5
         );
         POISON_DART = registerEntity("poison_dart", FabricEntityTypeBuilder.<PoisonDartEntity>create(SpawnGroup.MISC, PoisonDartEntity::new).dimensions(EntityDimensions.changing(0.5f, 0.5f)).trackRangeBlocks(4).trackedUpdateRate(20).build());
