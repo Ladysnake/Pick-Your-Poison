@@ -10,7 +10,7 @@
     "LookControlMixin",
     "MobEntityMixin",
     "PersistentProjectileEntityMixin",
-    "PlayerEntityFromLivingEntityMixin"z
+    "PlayerEntityFromLivingEntityMixin"
   ],
   "client": [
     "ClientPlayerEntityMixin",

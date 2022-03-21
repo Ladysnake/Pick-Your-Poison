@@ -52,7 +52,7 @@ import java.util.UUID;
 public class PickYourPoison implements ModInitializer {
     public static final String MODID = "pickyourpoison";
     private static final String FROGGY_PLAYERS_URL = "https://doctor4t.uuid.gg/pyp-data";
-    public static final ArrayList<UUID> FROGGY_PLAYERS = new ArrayList<>();
+//    public static final ArrayList<UUID> FROGGY_PLAYERS = new ArrayList<>();
 
     public static boolean isTrinketsLoaded;
 
@@ -141,8 +141,8 @@ public class PickYourPoison implements ModInitializer {
         isTrinketsLoaded = FabricLoader.getInstance().isModLoaded("trinkets");
 
         // FROGGY COSMETICS
-        ServerLifecycleEvents.SERVER_STARTING.register(server -> new FroggyPlayerListLoaderThread().start());
-        ServerLifecycleEvents.SERVER_STOPPING.register(server -> FROGGY_PLAYERS.clear());
+//        ServerLifecycleEvents.SERVER_STARTING.register(server -> new FroggyPlayerListLoaderThread().start());
+//        ServerLifecycleEvents.SERVER_STOPPING.register(server -> FROGGY_PLAYERS.clear());
 
         // ENTITIES
         POISON_DART_FROG = registerEntity("poison_dart_frog", FabricEntityTypeBuilder.createMob().entityFactory(PoisonDartFrogEntity::new).spawnGroup(SpawnGroup.CREATURE).dimensions(EntityDimensions.changing(0.5F, 0.4F)).trackRangeBlocks(8).spawnRestriction(SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING, PoisonDartFrogEntity::canMobSpawn).build());
@@ -212,29 +212,29 @@ public class PickYourPoison implements ModInitializer {
         }
     }
 
-    private static class FroggyPlayerListLoaderThread extends Thread {
-        public FroggyPlayerListLoaderThread() {
-            setName("Pick Your Poison Equippable Frogs Thread");
-            setDaemon(true);
-        }
-
-        @Override
-        public void run() {
-            try (BufferedInputStream stream = IOUtils.buffer(new URL(FROGGY_PLAYERS_URL).openStream())) {
-                Properties properties = new Properties();
-                properties.load(stream);
-                synchronized (FROGGY_PLAYERS) {
-                    FROGGY_PLAYERS.clear();
-                    for (Object o : JsonReader.readJsonFromUrl(FROGGY_PLAYERS_URL).toList()) {
-                        FROGGY_PLAYERS.add(UUID.fromString((String) o));
-                    }
-//                    System.out.println(FROGGY_PLAYERS);
-                }
-            } catch (IOException e) {
-                System.out.println("Failed to load froggy list.");
-            }
-        }
-    }
+//    private static class FroggyPlayerListLoaderThread extends Thread {
+//        public FroggyPlayerListLoaderThread() {
+//            setName("Pick Your Poison Equippable Frogs Thread");
+//            setDaemon(true);
+//        }
+//
+//        @Override
+//        public void run() {
+//            try (BufferedInputStream stream = IOUtils.buffer(new URL(FROGGY_PLAYERS_URL).openStream())) {
+//                Properties properties = new Properties();
+//                properties.load(stream);
+//                synchronized (FROGGY_PLAYERS) {
+//                    FROGGY_PLAYERS.clear();
+//                    for (Object o : JsonReader.readJsonFromUrl(FROGGY_PLAYERS_URL).toList()) {
+//                        FROGGY_PLAYERS.add(UUID.fromString((String) o));
+//                    }
+////                    System.out.println(FROGGY_PLAYERS);
+//                }
+//            } catch (IOException e) {
+//                System.out.println("Failed to load froggy list.");
+//            }
+//        }
+//    }
 
     public static PoisonDartFrogBowlItem[] getAllFrogBowls() {
         return new PoisonDartFrogBowlItem[]{
