@@ -1,7 +1,11 @@
 # Pick Your Poison - Changelog:
 
+### Pick Your Poison 1.0.2 - 1.18.1
+- Fixed a crash if Trinkets isn't installed
+
 ### Pick Your Poison 1.0.1 - 1.18.1
 - Fixed a crash happening on dedicated servers
+- Add trinket support for supporters who can equip frogs
 
 ### Pick Your Poison 1.0 - 1.18.1
 - Adds poison dart frogs

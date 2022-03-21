@@ -14,7 +14,6 @@ import ladysnake.satin.api.managed.ShaderEffectManager;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityRendererRegistry;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
@@ -61,7 +60,9 @@ public class PickYourPoisonClient implements ClientModInitializer {
         });
 
         // TRINKETS COMPAT
-        registerFrogTrinketRenderers(PickYourPoison.getAllFrogBowls());
+        if (PickYourPoison.isTrinketsLoaded) {
+            registerFrogTrinketRenderers(PickYourPoison.getAllFrogBowls());
+        }
     }
 
     private static class ClientFroggyPlayerListLoaderThread extends Thread {
@@ -90,24 +91,22 @@ public class PickYourPoisonClient implements ClientModInitializer {
     }
 
     private static void registerFrogTrinketRenderers(PoisonDartFrogBowlItem... items) {
-        if (PickYourPoison.isTrinketsLoaded) {
-            for (PoisonDartFrogBowlItem item : items) {
-                TrinketRendererRegistry.registerRenderer(item, new TrinketRenderer() {
-                    private Model model = null;
+        for (PoisonDartFrogBowlItem item : items) {
+            TrinketRendererRegistry.registerRenderer(item, new TrinketRenderer() {
+                private Model model = null;
 
-                    @Override
-                    public void render(ItemStack stack, SlotReference slotReference, EntityModel<? extends LivingEntity> contextModel, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, LivingEntity entity, float limbAngle, float limbDistance, float tickDelta, float animationProgress, float headYaw, float headPitch) {
-                        if (model == null) {
-                            model = new FrogOnHeadModel(MinecraftClient.getInstance().getEntityModelLoader().getModelPart(FrogOnHeadModel.MODEL_LAYER));
-                        } else if (!entity.isInvisible() && PickYourPoisonClient.FROGGY_PLAYERS_CLIENT.contains(entity.getUuid())) {
-                            matrices.push();
-                            ((PlayerEntityModel<AbstractClientPlayerEntity>) contextModel).head.rotate(matrices);
-                            model.render(matrices, vertexConsumers.getBuffer(RenderLayer.getEntityCutout(item.texture)), light, OverlayTexture.DEFAULT_UV, 1f, 1f, 1f, 1f);
-                            matrices.pop();
-                        }
+                @Override
+                public void render(ItemStack stack, SlotReference slotReference, EntityModel<? extends LivingEntity> contextModel, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, LivingEntity entity, float limbAngle, float limbDistance, float tickDelta, float animationProgress, float headYaw, float headPitch) {
+                    if (model == null) {
+                        model = new FrogOnHeadModel(MinecraftClient.getInstance().getEntityModelLoader().getModelPart(FrogOnHeadModel.MODEL_LAYER));
+                    } else if (!entity.isInvisible() && PickYourPoisonClient.FROGGY_PLAYERS_CLIENT.contains(entity.getUuid())) {
+                        matrices.push();
+                        ((PlayerEntityModel<AbstractClientPlayerEntity>) contextModel).head.rotate(matrices);
+                        model.render(matrices, vertexConsumers.getBuffer(RenderLayer.getEntityCutout(item.texture)), light, OverlayTexture.DEFAULT_UV, 1f, 1f, 1f, 1f);
+                        matrices.pop();
                     }
-                });
-            }
+                }
+            });
         }
     }
 }
