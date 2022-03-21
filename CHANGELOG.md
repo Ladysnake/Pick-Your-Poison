@@ -1,6 +1,6 @@
 # Pick Your Poison - Changelog:
 
-### Pick Your Poison 1.1 - 1.18.1
+### Pick Your Poison 1.0.1 - 1.18.1
 - Fixed a crash happening on dedicated servers
 
 ### Pick Your Poison 1.0 - 1.18.1
