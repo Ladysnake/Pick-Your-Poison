@@ -52,6 +52,7 @@ dependencies {
 	include "dev.onyxstudios.cardinal-components-api:cardinal-components-entity:4.1.3"
 
 	implementation 'org.json:json:20211205'
+	include 'org.json:json:20211205'
 }
 
 processResources {
@@ -138,7 +139,6 @@ githubRelease {
 	FilenameFilter filter = { dir, filename -> filename.contains(project.version) && !filename.contains('-dev.jar') }
 	releaseAssets = { jar.destinationDirectory.asFile.get().listFiles filter }
 }
-tasks.githubRelease.dependsOn(checkGitStatus)
 
 curseforge {
 

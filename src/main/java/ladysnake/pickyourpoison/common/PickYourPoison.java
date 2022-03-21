@@ -8,12 +8,12 @@ import ladysnake.pickyourpoison.common.statuseffect.EmptyStatusEffect;
 import ladysnake.pickyourpoison.common.statuseffect.NumbnessStatusEffect;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.block.dispenser.ProjectileDispenserBehavior;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.*;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -47,6 +47,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 
 public class PickYourPoison implements ModInitializer {
     public static final String MODID = "pickyourpoison";
@@ -134,7 +135,7 @@ public class PickYourPoison implements ModInitializer {
     public void onInitialize() {
         GeckoLib.initialize();
 
-        loadPlayerCosmetics();
+        ServerLifecycleEvents.SERVER_STARTING.register(server -> loadPlayerCosmetics(server));
 
         // ENTITIES
         POISON_DART_FROG = registerEntity("poison_dart_frog", FabricEntityTypeBuilder.createMob().entityFactory(PoisonDartFrogEntity::new).spawnGroup(SpawnGroup.CREATURE).dimensions(EntityDimensions.changing(0.5F, 0.4F)).trackRangeBlocks(8).spawnRestriction(SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING, PoisonDartFrogEntity::canMobSpawn).build());
@@ -204,7 +205,7 @@ public class PickYourPoison implements ModInitializer {
         }
     }
 
-    public static void loadPlayerCosmetics() {
+    public static void loadPlayerCosmetics(Executor executor) {
         // get illuminations player cosmetics
         CompletableFuture.supplyAsync(() -> {
             try {
@@ -222,6 +223,6 @@ public class PickYourPoison implements ModInitializer {
                 FROGGY_PLAYERS.add(UUID.fromString((String) o));
             }
             System.out.println(FROGGY_PLAYERS);
-        }, MinecraftClient.getInstance());
+        }, executor);
     }
 }
