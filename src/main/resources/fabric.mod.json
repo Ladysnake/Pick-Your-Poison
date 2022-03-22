@@ -2,16 +2,13 @@
   "schemaVersion": 1,
   "id": "pickyourpoison",
   "version": "${version}",
-
   "name": "Pick Your Poison",
   "description": "Poison dart frogs, new potion effects and poison darts!",
   "authors": [
     "doctor4t"
   ],
-
   "license": "ARR",
   "icon": "assets/pickyourpoison/icon.png",
-
   "environment": "*",
   "entrypoints": {
     "main": [
@@ -28,7 +25,6 @@
     "pickyourpoison.mixins.json"
   ],
   "accessWidener": "pickyourpoison.accesswidener",
-
   "depends": {
     "fabricloader": ">=0.12.12",
     "fabric": "*",

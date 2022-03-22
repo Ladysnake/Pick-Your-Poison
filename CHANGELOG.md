@@ -1,5 +1,8 @@
 # Pick Your Poison - Changelog:
 
+### Pick Your Poison 1.0.4 - 1.18.2
+- Fix an invalid player data on world load
+
 ### Pick Your Poison 1.0.3 - 1.18.2
 - Updated for Minecraft 1.18.2
 

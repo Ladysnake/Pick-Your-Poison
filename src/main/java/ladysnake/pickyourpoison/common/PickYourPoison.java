@@ -48,7 +48,7 @@ public class PickYourPoison implements ModInitializer {
     public static final String MODID = "pickyourpoison";
     // STATUS EFFECTS
     public static final StatusEffect VULNERABILITY = registerStatusEffect("vulnerability", new EmptyStatusEffect(StatusEffectCategory.HARMFUL, 0xFF891C));
-//    public static final ArrayList<UUID> FROGGY_PLAYERS = new ArrayList<>();
+    //    public static final ArrayList<UUID> FROGGY_PLAYERS = new ArrayList<>();
     public static final StatusEffect COMATOSE = registerStatusEffect("comatose", new EmptyStatusEffect(StatusEffectCategory.HARMFUL, 0x35A2F3));
     public static final StatusEffect NUMBNESS = registerStatusEffect("numbness", new NumbnessStatusEffect(StatusEffectCategory.HARMFUL, 0x62B229));
     public static final StatusEffect TORPOR = registerStatusEffect("torpor", new EmptyStatusEffect(StatusEffectCategory.HARMFUL, 0xD8C0B8));

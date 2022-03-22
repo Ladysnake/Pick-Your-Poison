@@ -20,16 +20,10 @@ public abstract class HungerManagerMixin {
     private int foodLevel;
 
     @Shadow
+    private float saturationLevel;
+
+    @Shadow
     private float exhaustion;
-
-    @Shadow
-    private float foodSaturationLevel;
-
-    @Shadow
-    private int foodTickTimer;
-
-    @Shadow
-    public abstract void addExhaustion(float exhaustion);
 
     @Inject(method = "update", at = @At("HEAD"), cancellable = true)
     public void update(PlayerEntity player, CallbackInfo callbackInfo) {
@@ -40,8 +34,8 @@ public abstract class HungerManagerMixin {
             this.prevFoodLevel = this.foodLevel;
             if (this.exhaustion > 4.0f) {
                 this.exhaustion -= 4.0f;
-                if (this.foodSaturationLevel > 0.0f) {
-                    this.foodSaturationLevel = Math.max(this.foodSaturationLevel - 1.0f, 0.0f);
+                if (this.saturationLevel > 0.0f) {
+                    this.saturationLevel = Math.max(this.saturationLevel - 1.0f, 0.0f);
                 } else if (difficulty != Difficulty.PEACEFUL) {
                     player.damage(PoisonDamageSource.STIMULATION, stimulationLevel * 2f);
                 }

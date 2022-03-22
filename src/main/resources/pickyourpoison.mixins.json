@@ -13,13 +13,13 @@
     "PlayerEntityFromLivingEntityMixin"
   ],
   "client": [
+    "ArmorFeatureRendererMixin",
     "ClientPlayerEntityMixin",
     "HeadFeatureRendererMixin",
     "InGameHudMixin",
     "KeyboardMixin",
     "MouseMixin",
-    "PlayerEntityRendererMixin",
-    "ArmorFeatureRendererMixin"
+    "PlayerEntityRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1
