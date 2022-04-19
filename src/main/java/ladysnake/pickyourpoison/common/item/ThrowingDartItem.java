@@ -137,7 +137,7 @@ public class ThrowingDartItem extends Item {
 
     @Override
     public ActionResult useOnEntity(ItemStack stack, PlayerEntity user, LivingEntity entity, Hand hand) {
-        if (entity instanceof PoisonDartFrogEntity && statusEffectInstance == null) {
+        if (entity instanceof PoisonDartFrogEntity poisonDartFrog && PoisonDartFrogEntity.getFrogPoisonEffect(poisonDartFrog.getPoisonDartFrogType()) != null && statusEffectInstance == null) {
             Item item = PickYourPoison.THROWING_DART;
             switch (((PoisonDartFrogEntity) entity).getPoisonDartFrogType()) {
                 case BLUE -> item = PickYourPoison.COMATOSE_POISON_DART;

@@ -42,6 +42,8 @@ public class PoisonDartFrogBowlItem extends Item {
             type = PoisonDartFrogEntity.Type.RED;
         } else if (item == PickYourPoison.LUXALAMANDER_BOWL) {
             type = PoisonDartFrogEntity.Type.LUXINTRUS;
+        } else if (item == PickYourPoison.RANA_BOWL) {
+            type = PoisonDartFrogEntity.Type.RANA;
         }
 
         return type;
@@ -55,7 +57,7 @@ public class PoisonDartFrogBowlItem extends Item {
             serverPlayerEntity.incrementStat(Stats.USED.getOrCreateStat(this));
         }
 
-        if (!world.isClient) {
+        if (!world.isClient && PoisonDartFrogEntity.getFrogPoisonEffect(getFrogType(stack.getItem())) != null) {
             user.addStatusEffect(PoisonDartFrogEntity.getFrogPoisonEffect(getFrogType(stack.getItem())));
         }
 
@@ -111,7 +113,7 @@ public class PoisonDartFrogBowlItem extends Item {
     }
 
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-        if (user.hasStatusEffect(PoisonDartFrogEntity.getFrogPoisonEffect(getFrogType(user.getStackInHand(hand).getItem())).getEffectType())) {
+        if (PoisonDartFrogEntity.getFrogPoisonEffect(getFrogType(user.getStackInHand(hand).getItem())) != null && user.hasStatusEffect(PoisonDartFrogEntity.getFrogPoisonEffect(getFrogType(user.getStackInHand(hand).getItem())).getEffectType())) {
             return TypedActionResult.pass(user.getStackInHand(hand));
         }
         return ItemUsage.consumeHeldItem(world, user, hand);

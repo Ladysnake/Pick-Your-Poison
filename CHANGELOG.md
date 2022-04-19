@@ -1,5 +1,9 @@
 # Pick Your Poison - Changelog:
 
+### Pick Your Poison 1.0.5 - 1.18.2
+- Added a new Rana frog variant, obtained by naming any poison dart frog "Rana"
+  - Doesn't have any effect, nor can be used to coat poison darts
+
 ### Pick Your Poison 1.0.4 - 1.18.2
 - Fix an invalid player data on world load
 

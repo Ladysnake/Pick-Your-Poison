@@ -54,7 +54,6 @@ public class PickYourPoison implements ModInitializer {
     public static final StatusEffect TORPOR = registerStatusEffect("torpor", new EmptyStatusEffect(StatusEffectCategory.HARMFUL, 0xD8C0B8));
     public static final StatusEffect BATRACHOTOXIN = registerStatusEffect("batrachotoxin", new EmptyStatusEffect(StatusEffectCategory.HARMFUL, 0xEAD040));
     public static final StatusEffect STIMULATION = registerStatusEffect("stimulation", new EmptyStatusEffect(StatusEffectCategory.HARMFUL, 0xD85252).addAttributeModifier(EntityAttributes.GENERIC_MOVEMENT_SPEED, "91AEAA56-376B-4498-935B-2F7F68070635", 0.2f, EntityAttributeModifier.Operation.MULTIPLY_TOTAL));
-    private static final String FROGGY_PLAYERS_URL = "https://doctor4t.uuid.gg/pyp-data";
     public static boolean isTrinketsLoaded;
     // ENTITIES
     public static EntityType<PoisonDartFrogEntity> POISON_DART_FROG;
@@ -68,6 +67,7 @@ public class PickYourPoison implements ModInitializer {
     public static PoisonDartFrogBowlItem CRIMSON_POISON_DART_FROG_BOWL;
     public static PoisonDartFrogBowlItem RED_POISON_DART_FROG_BOWL;
     public static PoisonDartFrogBowlItem LUXALAMANDER_BOWL;
+    public static PoisonDartFrogBowlItem RANA_BOWL;
     public static Item THROWING_DART;
     public static Item COMATOSE_POISON_DART;
     public static Item BATRACHOTOXIN_POISON_DART;
@@ -133,7 +133,8 @@ public class PickYourPoison implements ModInitializer {
                 PickYourPoison.GREEN_POISON_DART_FROG_BOWL,
                 PickYourPoison.GOLDEN_POISON_DART_FROG_BOWL,
                 PickYourPoison.ORANGE_POISON_DART_FROG_BOWL,
-                PickYourPoison.LUXALAMANDER_BOWL
+                PickYourPoison.LUXALAMANDER_BOWL,
+                PickYourPoison.RANA_BOWL
         };
     }
 
@@ -167,6 +168,7 @@ public class PickYourPoison implements ModInitializer {
         CRIMSON_POISON_DART_FROG_BOWL = registerItem("crimson_poison_dart_frog_bowl", new PoisonDartFrogBowlItem((new Item.Settings()).group(ItemGroup.FOOD).maxCount(1), new Identifier(MODID, "textures/entity/crimson.png")));
         RED_POISON_DART_FROG_BOWL = registerItem("red_poison_dart_frog_bowl", new PoisonDartFrogBowlItem((new Item.Settings()).group(ItemGroup.FOOD).maxCount(1), new Identifier(MODID, "textures/entity/red.png")));
         LUXALAMANDER_BOWL = registerItem("luxalamander_bowl", new PoisonDartFrogBowlItem((new Item.Settings()).group(ItemGroup.FOOD).maxCount(1).rarity(Rarity.RARE), new Identifier(MODID, "textures/entity/luxintrus.png")));
+        RANA_BOWL = registerItem("rana_bowl", new PoisonDartFrogBowlItem((new Item.Settings()).group(ItemGroup.FOOD).maxCount(1).rarity(Rarity.RARE), new Identifier(MODID, "textures/entity/rana.png")));
         THROWING_DART = registerDartItem("throwing_dart", new ThrowingDartItem((new Item.Settings()).group(ItemGroup.COMBAT).maxCount(64), null));
         COMATOSE_POISON_DART = registerDartItem("comatose_poison_dart", new ThrowingDartItem((new Item.Settings()).group(ItemGroup.COMBAT).maxCount(1), new StatusEffectInstance(PickYourPoison.COMATOSE, 100))); // 5s
         BATRACHOTOXIN_POISON_DART = registerDartItem("batrachotoxin_poison_dart", new ThrowingDartItem((new Item.Settings()).group(ItemGroup.COMBAT).maxCount(1), new StatusEffectInstance(PickYourPoison.BATRACHOTOXIN, 80))); // 4s

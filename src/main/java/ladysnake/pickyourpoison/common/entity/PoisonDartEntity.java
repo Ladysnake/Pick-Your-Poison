@@ -72,6 +72,7 @@ public class PoisonDartEntity extends PersistentProjectileEntity {
     @Override
     public void tick() {
         super.tick();
+
         if (this.world.isClient) {
             if (this.inGround) {
                 if (this.inGroundTime % 5 == 0) {

@@ -155,12 +155,21 @@ public class PoisonDartFrogEntity extends AnimalEntity implements IAnimatable {
         }
 
         this.setNoDrag(!this.isOnGround());
+
+        // turn into rana
+        if (this.getPoisonDartFrogType() != Type.RANA && this.hasCustomName()) {
+            if (this.getCustomName().getString().equalsIgnoreCase("rana")) {
+                this.setPoisonDartFrogType(Type.RANA);
+            }
+        }
+
     }
 
     @Override
     public ActionResult interactMob(PlayerEntity player, Hand hand) {
         if (player.getStackInHand(hand).getItem() == Items.BOWL) {
             Item item = Items.BOWL;
+
             switch (this.getPoisonDartFrogType()) {
                 case BLUE -> item = PickYourPoison.BLUE_POISON_DART_FROG_BOWL;
                 case GOLDEN -> item = PickYourPoison.GOLDEN_POISON_DART_FROG_BOWL;
@@ -169,6 +178,7 @@ public class PoisonDartFrogEntity extends AnimalEntity implements IAnimatable {
                 case CRIMSON -> item = PickYourPoison.CRIMSON_POISON_DART_FROG_BOWL;
                 case RED -> item = PickYourPoison.RED_POISON_DART_FROG_BOWL;
                 case LUXINTRUS -> item = PickYourPoison.LUXALAMANDER_BOWL;
+                case RANA -> item = PickYourPoison.RANA_BOWL;
             }
 
             ItemStack itemStack = new ItemStack(item);
@@ -294,7 +304,8 @@ public class PoisonDartFrogEntity extends AnimalEntity implements IAnimatable {
         ORANGE,
         CRIMSON,
         RED,
-        LUXINTRUS
+        LUXINTRUS,
+        RANA
     }
 
 }
