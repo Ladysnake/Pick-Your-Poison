@@ -2,6 +2,7 @@
 
 ### Pick Your Poison 1.0.7 - 1.18.2
 - The first damage taken after comatose no longer damages the comatosed player
+- Fixed a crash when punching a Rana frog
 
 ### Pick Your Poison 1.0.6 - 1.18.2
 - Changed the batrachotoxin death message to "Player croaked"*
