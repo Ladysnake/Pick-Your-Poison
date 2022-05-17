@@ -1,5 +1,8 @@
 # Pick Your Poison - Changelog:
 
+### Pick Your Poison 1.0.7 - 1.18.2
+- The first damage taken after comatose no longer damages the comatosed player
+
 ### Pick Your Poison 1.0.6 - 1.18.2
 - Changed the batrachotoxin death message to "Player croaked"*
 - Added new death messages for dying of frog effects in PvP

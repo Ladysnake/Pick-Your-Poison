@@ -18,6 +18,7 @@ public class PlayerEntityFromLivingEntityMixin {
         LivingEntity livingEntity = LivingEntity.class.cast(this);
         if (livingEntity.hasStatusEffect(PickYourPoison.COMATOSE)) {
             livingEntity.removeStatusEffect(PickYourPoison.COMATOSE);
+            callbackInfo.cancel();
         }
 
         if (source != PoisonDamageSource.BACKLASH && livingEntity.hasStatusEffect(PickYourPoison.NUMBNESS) && amount > 0.1f) {
