@@ -10,7 +10,8 @@
     "LookControlMixin",
     "MobEntityMixin",
     "PersistentProjectileEntityMixin",
-    "PlayerEntityFromLivingEntityMixin"
+    "PlayerEntityFromLivingEntityMixin",
+    "PlayerEntityMixin"
   ],
   "client": [
     "ArmorFeatureRendererMixin",

@@ -1,5 +1,10 @@
 # Pick Your Poison - Changelog:
 
+### Pick Your Poison 1.0.8 - 1.18.2
+- Decrease Vulnerability damage multiplier from 50% to 25%
+- Players now need to sneak in order to release frogs from bowls
+- Numbness now leaves the player on 1 health for backlash damage that would kill them
+
 ### Pick Your Poison 1.0.7 - 1.18.2
 - The first damage taken after comatose no longer damages the comatosed player
 - Fixed a crash when punching a Rana frog

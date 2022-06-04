@@ -1,5 +1,6 @@
 package ladysnake.pickyourpoison.mixin;
 
+import ladysnake.pickyourpoison.cca.PickYourPoisonEntityComponents;
 import ladysnake.pickyourpoison.common.PickYourPoison;
 import ladysnake.pickyourpoison.common.damage.PoisonDamageSource;
 import ladysnake.pickyourpoison.common.item.PoisonDartFrogBowlItem;
@@ -75,6 +76,10 @@ public abstract class LivingEntityMixin extends Entity {
     @Shadow
     public abstract void equipStack(EquipmentSlot slot, ItemStack stack);
 
+    @Shadow public abstract float getHealth();
+
+    @Shadow public abstract void setHealth(float health);
+
     @Inject(method = "canSee", at = @At("HEAD"), cancellable = true)
     public void canSee(Entity entity, CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
         if (this.hasStatusEffect(PickYourPoison.COMATOSE) && !this.isSpectator() && !((Object) this instanceof PlayerEntity && PlayerEntity.class.cast(this).isCreative())) {
@@ -110,7 +115,7 @@ public abstract class LivingEntityMixin extends Entity {
     @ModifyVariable(method = "damage", at = @At("HEAD"))
     private float multiplyDamageForVulnerability(float amount) {
         if (this.hasStatusEffect(PickYourPoison.VULNERABILITY)) {
-            return amount + (amount * (0.5f * (this.getStatusEffect(PickYourPoison.VULNERABILITY).getAmplifier() + 1)));
+            return amount + (amount * (0.25f * (this.getStatusEffect(PickYourPoison.VULNERABILITY).getAmplifier() + 1)));
         }
         return amount;
     }
@@ -119,6 +124,18 @@ public abstract class LivingEntityMixin extends Entity {
     public void torporCancelHeal(float amount, CallbackInfo callbackInfo) {
         if (this.hasStatusEffect(PickYourPoison.TORPOR)) {
             callbackInfo.cancel();
+        }
+    }
+
+    @Inject(method = "applyDamage", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/entity/LivingEntity;getHealth()F"), cancellable = true)
+    private void pickyourpoison$saveFromNumbness(DamageSource source, float amount, CallbackInfo ci) {
+        if (!world.isClient && getHealth() - amount <= 0) {
+            PickYourPoisonEntityComponents.NUMBNESS_DAMAGE.maybeGet(this).ifPresent(retributionComponent -> {
+                if (retributionComponent.getDamageAccumulated() > 0) {
+                    this.setHealth(1.0f);
+                    ci.cancel();
+                }
+            });
         }
     }
 }

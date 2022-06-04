@@ -67,7 +67,7 @@ public class PoisonDartFrogBowlItem extends Item {
     @Override
     public ActionResult useOnBlock(ItemUsageContext context) {
         PoisonDartFrogEntity.Type type = getFrogType(context.getStack().getItem());
-        if (type != null) {
+        if (type != null && context.getPlayer() != null && context.getPlayer().isSneaking()) {
             PoisonDartFrogEntity poisonDartFrog = new PoisonDartFrogEntity(PickYourPoison.POISON_DART_FROG, context.getWorld());
 
             BlockHitResult blockHitResult = BucketItem.raycast(context.getWorld(), context.getPlayer(), RaycastContext.FluidHandling.SOURCE_ONLY);
