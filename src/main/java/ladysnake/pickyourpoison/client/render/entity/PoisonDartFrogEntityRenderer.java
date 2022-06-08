@@ -18,6 +18,6 @@ public class PoisonDartFrogEntityRenderer extends GeoEntityRenderer<PoisonDartFr
 
     @Override
     public RenderLayer getRenderType(PoisonDartFrogEntity animatable, float partialTicks, MatrixStack stack, VertexConsumerProvider renderTypeBuffer, VertexConsumer vertexBuilder, int packedLightIn, Identifier textureLocation) {
-        return RenderLayer.getEntityTranslucent(this.getTextureLocation(animatable));
+        return RenderLayer.getEntityTranslucent(this.getTexture(animatable));
     }
 }

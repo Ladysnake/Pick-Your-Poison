@@ -32,6 +32,7 @@ import net.minecraft.tag.BlockTags;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
 import org.jetbrains.annotations.Nullable;
@@ -44,7 +45,6 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import java.util.List;
-import java.util.Random;
 
 public class PoisonDartFrogEntity extends AnimalEntity implements IAnimatable {
     public static final List<Type> NATURAL_TYPES = ImmutableList.of(

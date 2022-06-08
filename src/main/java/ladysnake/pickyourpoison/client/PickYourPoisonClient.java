@@ -8,8 +8,8 @@ import ladysnake.satin.api.event.ShaderEffectRenderCallback;
 import ladysnake.satin.api.managed.ManagedShaderEffect;
 import ladysnake.satin.api.managed.ShaderEffectManager;
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityModelLayerRegistry;
-import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityRendererRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.Identifier;
 import org.apache.commons.io.IOUtils;
@@ -33,8 +33,8 @@ public class PickYourPoisonClient implements ClientModInitializer {
         new ClientFroggyPlayerListLoaderThread().start();
 
         // MODEL LAYERS
-        EntityRendererRegistry.INSTANCE.register(PickYourPoison.POISON_DART_FROG, PoisonDartFrogEntityRenderer::new);
-        EntityRendererRegistry.INSTANCE.register(PickYourPoison.POISON_DART, PoisonDartEntityRenderer::new);
+        EntityRendererRegistry.register(PickYourPoison.POISON_DART_FROG, PoisonDartFrogEntityRenderer::new);
+        EntityRendererRegistry.register(PickYourPoison.POISON_DART, PoisonDartEntityRenderer::new);
         EntityModelLayerRegistry.registerModelLayer(FrogOnHeadModel.MODEL_LAYER, FrogOnHeadModel::getTexturedModelData);
 
         // COMA SHADER

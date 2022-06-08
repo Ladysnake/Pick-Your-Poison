@@ -15,7 +15,7 @@ public abstract class MobEntityMixin extends LivingEntity {
         super(entityType, world);
     }
 
-    @ModifyVariable(method = "setTarget", at = @At("HEAD"))
+    @ModifyVariable(method = "setTarget", at = @At("HEAD"), argsOnly = true)
     public LivingEntity setTarget(LivingEntity target) {
         if (this.hasStatusEffect(PickYourPoison.COMATOSE)) {
             return null;

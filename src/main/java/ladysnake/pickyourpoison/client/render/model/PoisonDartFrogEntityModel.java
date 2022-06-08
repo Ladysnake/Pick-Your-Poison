@@ -8,17 +8,17 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 
 public class PoisonDartFrogEntityModel extends AnimatedGeoModel<PoisonDartFrogEntity> {
     @Override
-    public Identifier getModelLocation(PoisonDartFrogEntity poisonDartFrog) {
+    public Identifier getModelResource(PoisonDartFrogEntity poisonDartFrog) {
         return new Identifier(PickYourPoison.MODID, "geo/entity/poison_dart_frog.geo.json");
     }
 
     @Override
-    public Identifier getTextureLocation(PoisonDartFrogEntity poisonDartFrog) {
+    public Identifier getTextureResource(PoisonDartFrogEntity poisonDartFrog) {
         return new Identifier(PickYourPoison.MODID, "textures/entity/" + poisonDartFrog.getPoisonDartFrogType().toString().toLowerCase() + ".png");
     }
 
     @Override
-    public Identifier getAnimationFileLocation(PoisonDartFrogEntity poisonDartFrog) {
+    public Identifier getAnimationResource(PoisonDartFrogEntity poisonDartFrog) {
         return new Identifier(PickYourPoison.MODID, "animations/entity/poison_dart_frog.animation.json");
     }
 

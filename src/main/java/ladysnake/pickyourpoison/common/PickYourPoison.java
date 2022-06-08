@@ -11,6 +11,7 @@ import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
+import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.block.dispenser.ProjectileDispenserBehavior;
@@ -35,7 +36,6 @@ import net.minecraft.util.math.Position;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.Heightmap;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
 import org.json.JSONArray;
 import org.json.JSONException;
 import software.bernie.geckolib3.GeckoLib;
@@ -154,7 +154,7 @@ public class PickYourPoison implements ModInitializer {
         POISON_DART_FROG = registerEntity("poison_dart_frog", FabricEntityTypeBuilder.createMob().entityFactory(PoisonDartFrogEntity::new).spawnGroup(SpawnGroup.CREATURE).dimensions(EntityDimensions.changing(0.5F, 0.4F)).trackRangeBlocks(8).spawnRestriction(SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING, PoisonDartFrogEntity::canMobSpawn).build());
         FabricDefaultAttributeRegistry.register(POISON_DART_FROG, PoisonDartFrogEntity.createPoisonDartFrogAttributes());
         BiomeModifications.addSpawn(
-                biome -> Biome.getCategory(biome.getBiomeRegistryEntry()).equals(Biome.Category.JUNGLE),
+                biome -> biome.hasTag(ConventionalBiomeTags.JUNGLE),
                 SpawnGroup.CREATURE, POISON_DART_FROG, 50, 2, 5
         );
         POISON_DART = registerEntity("poison_dart", FabricEntityTypeBuilder.<PoisonDartEntity>create(SpawnGroup.MISC, PoisonDartEntity::new).dimensions(EntityDimensions.changing(0.5f, 0.5f)).trackRangeBlocks(4).trackedUpdateRate(20).build());

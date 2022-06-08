@@ -1,5 +1,8 @@
 # Pick Your Poison - Changelog:
 
+### Pick Your Poison 1.0.8 - 1.19
+- Update to Minecraft 1.19
+
 ### Pick Your Poison 1.0.8 - 1.18.2
 - Decrease Vulnerability damage multiplier from 50% to 25%
 - Players now need to sneak in order to release frogs from bowls
