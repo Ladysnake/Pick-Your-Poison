@@ -1,9 +1,9 @@
 # Pick Your Poison - Changelog:
 
-### Pick Your Poison 1.0.8 - 1.19.2
+### Pick Your Poison 1.0.10 - 1.19.2
 - Numbness obtained from licking a frog bowl no longer leaves the player on 1 health for backlash damage that would kill them
 
-### Pick Your Poison 1.0.8 - 1.19
+### Pick Your Poison 1.0.9 - 1.19
 - Update to Minecraft 1.19
 
 ### Pick Your Poison 1.0.8 - 1.18.2
