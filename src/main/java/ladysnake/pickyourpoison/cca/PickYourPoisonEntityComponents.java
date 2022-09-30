@@ -11,6 +11,7 @@ public final class PickYourPoisonEntityComponents implements EntityComponentInit
     public static final ComponentKey<NumbnessRetributionComponent> NUMBNESS_DAMAGE =
             ComponentRegistryV3.INSTANCE.getOrCreate(new Identifier("pickyourpoison", "numbnessdamage"), NumbnessRetributionComponent.class);
 
+
     @Override
     public void registerEntityComponentFactories(EntityComponentFactoryRegistry registry) {
         registry.registerFor(LivingEntity.class, NUMBNESS_DAMAGE, world -> new NumbnessRetributionComponent());

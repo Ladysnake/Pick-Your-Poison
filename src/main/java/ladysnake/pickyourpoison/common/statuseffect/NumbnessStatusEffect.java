@@ -22,10 +22,8 @@ public class NumbnessStatusEffect extends StatusEffect {
         super.onRemoved(entity, attributes, amplifier);
 
         entity.damage(PoisonDamageSource.BACKLASH, PickYourPoisonEntityComponents.NUMBNESS_DAMAGE.get(entity).getDamageAccumulated());
-        if (entity.getHealth() <= 0) {
-            entity.setHealth(1);
-        }
 
         PickYourPoisonEntityComponents.NUMBNESS_DAMAGE.get(entity).setDamageAccumulated(0f);
+        PickYourPoisonEntityComponents.NUMBNESS_DAMAGE.get(entity).setFromLicking(false);
     }
 }

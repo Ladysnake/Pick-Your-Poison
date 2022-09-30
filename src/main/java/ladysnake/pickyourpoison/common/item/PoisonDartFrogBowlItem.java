@@ -1,5 +1,6 @@
 package ladysnake.pickyourpoison.common.item;
 
+import ladysnake.pickyourpoison.cca.PickYourPoisonEntityComponents;
 import ladysnake.pickyourpoison.common.PickYourPoison;
 import ladysnake.pickyourpoison.common.entity.PoisonDartFrogEntity;
 import net.minecraft.advancement.criterion.Criteria;
@@ -59,6 +60,10 @@ public class PoisonDartFrogBowlItem extends Item {
 
         if (!world.isClient && PoisonDartFrogEntity.getFrogPoisonEffect(getFrogType(stack.getItem())) != null) {
             user.addStatusEffect(PoisonDartFrogEntity.getFrogPoisonEffect(getFrogType(stack.getItem())));
+
+            if (PoisonDartFrogEntity.getFrogPoisonEffect(getFrogType(stack.getItem())).getEffectType() == PickYourPoison.NUMBNESS) {
+                PickYourPoisonEntityComponents.NUMBNESS_DAMAGE.get(user).setFromLicking(true);
+            }
         }
 
         return stack;

@@ -21,7 +21,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     private void pickyourpoison$saveFromNumbness(DamageSource source, float amount, CallbackInfo ci) {
         if (!world.isClient && getHealth() - amount <= 0) {
             PickYourPoisonEntityComponents.NUMBNESS_DAMAGE.maybeGet(this).ifPresent(retributionComponent -> {
-                if (retributionComponent.getDamageAccumulated() > 0) {
+                if (retributionComponent.getDamageAccumulated() > 0 && !retributionComponent.isFromLicking()) {
                     this.setHealth(1.0f);
                     ci.cancel();
                 }
