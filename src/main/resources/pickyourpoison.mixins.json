@@ -4,6 +4,7 @@
   "package": "ladysnake.pickyourpoison.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "BlocksMixin",
     "EntityNavigationMixin",
     "HungerManagerMixin",
     "LivingEntityMixin",
