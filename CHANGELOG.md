@@ -1,5 +1,9 @@
 # Pick Your Poison - Changelog:
 
+### Pick Your Poison 1.0.11 - 1.19.2
+- Fixed frogs not rendering from further than 8 blocks
+- Fixed frogs not being able to naturally spawn on leaves
+
 ### Pick Your Poison 1.0.10 - 1.19.2
 - Numbness obtained from licking a frog bowl no longer leaves the player on 1 health for backlash damage that would kill them
 
