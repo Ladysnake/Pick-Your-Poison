@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Blocks.class)
 public class BlocksMixin {
-    @Inject(method = "canSpawnOnLeaves", at = @At("RETURN"))
+    @Inject(method = "canSpawnOnLeaves", at = @At("RETURN"), cancellable = true)
     private static void canSpawnOnLeaves(BlockState state, BlockView world, BlockPos pos, EntityType<?> type, CallbackInfoReturnable<Boolean> cir) {
         cir.setReturnValue(cir.getReturnValue() || type == PickYourPoison.POISON_DART_FROG);
     }

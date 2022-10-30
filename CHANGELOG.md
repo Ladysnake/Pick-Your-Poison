@@ -21,7 +21,7 @@
 - Fixed rana frog bowls being unequippable in trinket slots
 
 ### Pick Your Poison 1.0.6 - 1.18.2
-- Changed the batrachotoxin death message to "Player croaked"*
+- Changed the batrachotoxin death message to "Player croaked"
 - Added new death messages for dying of frog effects in PvP
 
 ### Pick Your Poison 1.0.5 - 1.18.2
