@@ -1,5 +1,7 @@
 package ladysnake.pickyourpoison.client.render.model;
 
+import java.util.Locale;
+
 import ladysnake.pickyourpoison.common.PickYourPoison;
 import ladysnake.pickyourpoison.common.entity.PoisonDartFrogEntity;
 import net.minecraft.util.Identifier;
@@ -14,7 +16,7 @@ public class PoisonDartFrogEntityModel extends AnimatedGeoModel<PoisonDartFrogEn
 
     @Override
     public Identifier getTextureResource(PoisonDartFrogEntity poisonDartFrog) {
-        return new Identifier(PickYourPoison.MODID, "textures/entity/" + poisonDartFrog.getPoisonDartFrogType().toString().toLowerCase() + ".png");
+        return new Identifier(PickYourPoison.MODID, "textures/entity/" + poisonDartFrog.getPoisonDartFrogType().toString().toLowerCase(Locale.ROOT) + ".png");
     }
 
     @Override
