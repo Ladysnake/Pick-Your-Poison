@@ -41,6 +41,12 @@
     "cardinal-components": [
       "pickyourpoison:numbnessdamage",
       "pickyourpoison:frograin"
-    ]
+    ],
+    "modmenu": {
+      "links": {
+        "modmenu.discord": "https://discord.ladysnake.org",
+        "modmenu.wiki": "https://ladysnake.org/wiki/pick-your-poison"
+      }
+    }
   }
 }
