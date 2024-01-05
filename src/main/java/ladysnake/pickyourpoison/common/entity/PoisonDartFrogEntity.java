@@ -54,6 +54,9 @@ public class PoisonDartFrogEntity extends AnimalEntity implements GeoEntity {
             Type.BLUE, Type.GOLDEN, Type.GREEN, Type.ORANGE, Type.CRIMSON, Type.RED
     );
     private static final TrackedData<String> TYPE = DataTracker.registerData(PoisonDartFrogEntity.class, TrackedDataHandlerRegistry.STRING);
+    private static final RawAnimation IDLE_ANIM = RawAnimation.begin().thenPlay("animation.poison_dart_frog.idle");
+    private static final RawAnimation SWIM_ANIM = RawAnimation.begin().thenPlay("animation.poison_dart_frog.swim");
+    private static final RawAnimation JUMP_ANIM = RawAnimation.begin().thenPlay("animation.poison_dart_frog.jump");
     private final AnimatableInstanceCache animationCache = GeckoLibUtil.createInstanceCache(this);
     public int fleeTime = 0;
     public boolean fromBowl = false;
@@ -125,11 +128,11 @@ public class PoisonDartFrogEntity extends AnimalEntity implements GeoEntity {
 
     private <A extends GeoAnimatable> PlayState animate(AnimationState<A> event) {
         if (this.isOnGround()) {
-            event.getController().setAnimation(RawAnimation.begin().thenPlay("animation.poison_dart_frog.idle"));
+            event.getController().setAnimation(IDLE_ANIM);
         } else if (this.isTouchingWater()) {
-            event.getController().setAnimation(RawAnimation.begin().thenPlay("animation.poison_dart_frog.swim"));
+            event.getController().setAnimation(SWIM_ANIM);
         } else if (this.age > 4) {
-            event.getController().setAnimation(RawAnimation.begin().thenPlay("animation.poison_dart_frog.jump"));
+            event.getController().setAnimation(JUMP_ANIM);
         }
         return PlayState.CONTINUE;
     }
