@@ -1,5 +1,5 @@
 ------------------------------------------------------
-Pick Your Poison 2.0.0 - 1.20.1
+Pick Your Poison 1.1.0 - 1.20.1
 ------------------------------------------------------
 - Updated to 1.20.1
 - Added Russian and Ukrainian localizations by Waifuri
