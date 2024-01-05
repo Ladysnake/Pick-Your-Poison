@@ -13,7 +13,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class MouseMixin {
     @Inject(method = "onMouseButton", at = @At("HEAD"), cancellable = true)
     private void onMouseButton(long window, int button, int action, int mods, CallbackInfo callbackInfo) {
-        if (MinecraftClient.getInstance().player != null && MinecraftClient.getInstance().player.hasStatusEffect(PickYourPoison.COMATOSE) && !MinecraftClient.getInstance().player.isSpectator() && !MinecraftClient.getInstance().player.isCreative()) {
+        if (MinecraftClient.getInstance().player != null &&
+                MinecraftClient.getInstance().player.hasStatusEffect(PickYourPoison.COMATOSE) &&
+                !MinecraftClient.getInstance().player.isSpectator() &&
+                !MinecraftClient.getInstance().player.isCreative() &&
+                !MinecraftClient.getInstance().isPaused()
+        ) {
             KeyBinding.unpressAll();
             callbackInfo.cancel();
         }
@@ -21,7 +26,11 @@ public abstract class MouseMixin {
 
     @Inject(method = "onMouseScroll", at = @At("HEAD"), cancellable = true)
     private void onMouseScroll(long window, double horizontal, double vertical, CallbackInfo callbackInfo) {
-        if (MinecraftClient.getInstance().player != null && MinecraftClient.getInstance().player.hasStatusEffect(PickYourPoison.COMATOSE) && !MinecraftClient.getInstance().player.isSpectator() && !MinecraftClient.getInstance().player.isCreative()) {
+        if (MinecraftClient.getInstance().player != null &&
+                MinecraftClient.getInstance().player.hasStatusEffect(PickYourPoison.COMATOSE) &&
+                !MinecraftClient.getInstance().player.isSpectator() &&
+                !MinecraftClient.getInstance().player.isCreative() &&
+                !MinecraftClient.getInstance().isPaused()) {
             KeyBinding.unpressAll();
             callbackInfo.cancel();
         }
