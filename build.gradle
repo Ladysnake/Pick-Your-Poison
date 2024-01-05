@@ -13,7 +13,6 @@ group = project.maven_group
 chenille {
 	javaVersion = 17
 	configurePublishing {
-		withCurseforgeRelease()
 		withGithubRelease()
 		withLadysnakeMaven()
 		withModrinthRelease()
