@@ -214,7 +214,7 @@ public class PoisonDartFrogEntity extends AnimalEntity implements GeoEntity {
 
     @Override
     public boolean damage(DamageSource source, float amount) {
-        if (source.getAttacker() != null && !source.isIn(DamageTypeTags.IS_PROJECTILE) && source.getAttacker() instanceof LivingEntity attacker && getFrogPoisonEffect(this.getPoisonDartFrogType()) != null) {
+        if (!getWorld().isClient() && source.getAttacker() != null && !source.isIn(DamageTypeTags.IS_PROJECTILE) && source.getAttacker() instanceof LivingEntity attacker && getFrogPoisonEffect(this.getPoisonDartFrogType()) != null) {
             attacker.addStatusEffect(getFrogPoisonEffect(this.getPoisonDartFrogType()));
         }
 
