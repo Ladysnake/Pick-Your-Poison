@@ -9,6 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.predicate.entity.AdvancementEntityPredicateDeserializer;
 import net.minecraft.predicate.entity.AdvancementEntityPredicateSerializer;
 import net.minecraft.predicate.entity.EntityPredicate;
+import net.minecraft.predicate.entity.LootContextPredicate;
 import net.minecraft.predicate.item.ItemPredicate;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
@@ -26,9 +27,9 @@ public class LickedFrogCriterion extends AbstractCriterion<LickedFrogCriterion.C
     }
 
     @Override
-    public Conditions conditionsFromJson(JsonObject jsonObject, EntityPredicate.Extended extended, AdvancementEntityPredicateDeserializer advancementEntityPredicateDeserializer) {
-        ItemPredicate itemPredicate = ItemPredicate.fromJson(jsonObject.get("item"));
-        return new Conditions(this.id, extended, itemPredicate);
+    protected Conditions conditionsFromJson(JsonObject obj, LootContextPredicate playerPredicate, AdvancementEntityPredicateDeserializer predicateDeserializer) {
+        ItemPredicate itemPredicate = ItemPredicate.fromJson(obj.get("item"));
+        return new Conditions(this.id, playerPredicate, itemPredicate);
     }
 
     public void trigger(ServerPlayerEntity player, ItemStack stack) {
@@ -38,13 +39,13 @@ public class LickedFrogCriterion extends AbstractCriterion<LickedFrogCriterion.C
     public static class Conditions extends AbstractCriterionConditions {
         private final ItemPredicate item;
 
-        public Conditions(Identifier id, EntityPredicate.Extended player, ItemPredicate item) {
-            super(id, player);
+        public Conditions(Identifier id, LootContextPredicate predicate, ItemPredicate item) {
+            super(id, predicate);
             this.item = item;
         }
 
         public static UsedTotemCriterion.Conditions create(ItemConvertible item) {
-            return new UsedTotemCriterion.Conditions(EntityPredicate.Extended.EMPTY, ItemPredicate.Builder.create().items(item).build());
+            return new UsedTotemCriterion.Conditions(LootContextPredicate.EMPTY, ItemPredicate.Builder.create().items(item).build());
         }
 
         public boolean matches(ItemStack stack) {

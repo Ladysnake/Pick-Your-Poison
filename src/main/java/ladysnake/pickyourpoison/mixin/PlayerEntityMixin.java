@@ -19,7 +19,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
     @Inject(method = "applyDamage", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/entity/player/PlayerEntity;getHealth()F", ordinal = 0), cancellable = true)
     private void pickyourpoison$saveFromNumbness(DamageSource source, float amount, CallbackInfo ci) {
-        if (!world.isClient && getHealth() - amount <= 0) {
+        if (!getWorld().isClient && getHealth() - amount <= 0) {
             PickYourPoisonEntityComponents.NUMBNESS_DAMAGE.maybeGet(this).ifPresent(retributionComponent -> {
                 if (retributionComponent.getDamageAccumulated() > 0 && !retributionComponent.isFromLicking()) {
                     this.setHealth(1.0f);

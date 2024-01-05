@@ -1,7 +1,7 @@
 package ladysnake.pickyourpoison.common.statuseffect;
 
 import ladysnake.pickyourpoison.cca.PickYourPoisonEntityComponents;
-import ladysnake.pickyourpoison.common.damage.PoisonDamageSource;
+import ladysnake.pickyourpoison.common.damage.PoisonDamageSources;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.AttributeContainer;
 import net.minecraft.entity.effect.StatusEffect;
@@ -21,7 +21,7 @@ public class NumbnessStatusEffect extends StatusEffect {
     public void onRemoved(LivingEntity entity, AttributeContainer attributes, int amplifier) {
         super.onRemoved(entity, attributes, amplifier);
 
-        entity.damage(PoisonDamageSource.BACKLASH, PickYourPoisonEntityComponents.NUMBNESS_DAMAGE.get(entity).getDamageAccumulated());
+        entity.damage(entity.getDamageSources().pypSources().backlash(), PickYourPoisonEntityComponents.NUMBNESS_DAMAGE.get(entity).getDamageAccumulated());
 
         PickYourPoisonEntityComponents.NUMBNESS_DAMAGE.get(entity).setDamageAccumulated(0f);
         PickYourPoisonEntityComponents.NUMBNESS_DAMAGE.get(entity).setFromLicking(false);

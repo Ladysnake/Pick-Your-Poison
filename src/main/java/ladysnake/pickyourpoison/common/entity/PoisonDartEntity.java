@@ -73,7 +73,7 @@ public class PoisonDartEntity extends PersistentProjectileEntity {
     public void tick() {
         super.tick();
 
-        if (this.world.isClient) {
+        if (this.getWorld().isClient) {
             if (this.inGround) {
                 if (this.inGroundTime % 5 == 0) {
                     this.spawnParticles(1);
@@ -82,7 +82,7 @@ public class PoisonDartEntity extends PersistentProjectileEntity {
                 this.spawnParticles(2);
             }
         } else if (this.inGround && this.inGroundTime != 0 && !this.effects.isEmpty() && this.inGroundTime >= 600) {
-            this.world.sendEntityStatus(this, (byte) 0);
+            this.getWorld().sendEntityStatus(this, (byte) 0);
             this.effects.clear();
             this.dataTracker.set(COLOR, -1);
         }
@@ -114,7 +114,7 @@ public class PoisonDartEntity extends PersistentProjectileEntity {
         double e = (double) (i >> 8 & 0xFF) / 255.0;
         double f = (double) (i >> 0 & 0xFF) / 255.0;
         for (int j = 0; j < amount; ++j) {
-            this.world.addParticle(ParticleTypes.ENTITY_EFFECT, this.getParticleX(0.5), this.getRandomBodyY(), this.getParticleZ(0.5), d, e, f);
+            this.getWorld().addParticle(ParticleTypes.ENTITY_EFFECT, this.getParticleX(0.5), this.getRandomBodyY(), this.getParticleZ(0.5), d, e, f);
         }
     }
 
@@ -186,7 +186,7 @@ public class PoisonDartEntity extends PersistentProjectileEntity {
                 double e = (double) (i >> 8 & 0xFF) / 255.0;
                 double f = (double) (i >> 0 & 0xFF) / 255.0;
                 for (int j = 0; j < 20; ++j) {
-                    this.world.addParticle(ParticleTypes.ENTITY_EFFECT, this.getParticleX(0.5), this.getRandomBodyY(), this.getParticleZ(0.5), d, e, f);
+                    this.getWorld().addParticle(ParticleTypes.ENTITY_EFFECT, this.getParticleX(0.5), this.getRandomBodyY(), this.getParticleZ(0.5), d, e, f);
                 }
             }
         } else {

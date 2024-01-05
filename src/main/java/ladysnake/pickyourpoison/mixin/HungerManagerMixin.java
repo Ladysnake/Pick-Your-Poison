@@ -1,7 +1,7 @@
 package ladysnake.pickyourpoison.mixin;
 
 import ladysnake.pickyourpoison.common.PickYourPoison;
-import ladysnake.pickyourpoison.common.damage.PoisonDamageSource;
+import ladysnake.pickyourpoison.common.damage.PoisonDamageSources;
 import net.minecraft.entity.player.HungerManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.Difficulty;
@@ -30,14 +30,14 @@ public abstract class HungerManagerMixin {
         if (player.hasStatusEffect(PickYourPoison.STIMULATION)) {
             int stimulationLevel = player.getStatusEffect(PickYourPoison.STIMULATION).getAmplifier() + 1;
 
-            Difficulty difficulty = player.world.getDifficulty();
+            Difficulty difficulty = player.getWorld().getDifficulty();
             this.prevFoodLevel = this.foodLevel;
             if (this.exhaustion > 4.0f) {
                 this.exhaustion -= 4.0f;
                 if (this.saturationLevel > 0.0f) {
                     this.saturationLevel = Math.max(this.saturationLevel - 1.0f, 0.0f);
                 } else if (difficulty != Difficulty.PEACEFUL) {
-                    player.damage(PoisonDamageSource.STIMULATION, stimulationLevel * 2f);
+                    player.damage(player.getDamageSources().pypSources().stimulation(), stimulationLevel * 2f);
                 }
             }
 

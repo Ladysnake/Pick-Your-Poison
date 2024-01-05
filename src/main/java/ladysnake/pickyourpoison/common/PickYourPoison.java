@@ -9,6 +9,7 @@ import ladysnake.pickyourpoison.common.statuseffect.NumbnessStatusEffect;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags;
@@ -25,24 +26,28 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemGroups;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SpawnEggItem;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Rarity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Position;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.Heightmap;
 import net.minecraft.world.World;
 import org.json.JSONArray;
 import org.json.JSONException;
-import software.bernie.geckolib3.GeckoLib;
+import software.bernie.geckolib.GeckoLib;
 
 import java.io.*;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.stream.Stream;
 
 public class PickYourPoison implements ModInitializer {
     public static final String MODID = "pickyourpoison";
@@ -77,27 +82,31 @@ public class PickYourPoison implements ModInitializer {
     public static Item STIMULATION_POISON_DART;
     public static Item BLINDNESS_POISON_DART;
     // SOUNDS
-    public static SoundEvent ENTITY_POISON_DART_FROG_AMBIENT = new SoundEvent(new Identifier(MODID, "entity.poison_dart_frog.ambient"));
-    public static SoundEvent ENTITY_POISON_DART_FROG_HURT = new SoundEvent(new Identifier(MODID, "entity.poison_dart_frog.hurt"));
-    public static SoundEvent ENTITY_POISON_DART_FROG_DEATH = new SoundEvent(new Identifier(MODID, "entity.poison_dart_frog.death"));
-    public static SoundEvent ENTITY_POISON_DART_HIT = new SoundEvent(new Identifier(MODID, "entity.poison_dart.hit"));
-    public static SoundEvent ITEM_POISON_DART_FROG_BOWL_FILL = new SoundEvent(new Identifier(MODID, "item.poison_dart_frog_bowl.fill"));
-    public static SoundEvent ITEM_POISON_DART_FROG_BOWL_EMPTY = new SoundEvent(new Identifier(MODID, "item.poison_dart_frog_bowl.empty"));
-    public static SoundEvent ITEM_POISON_DART_FROG_BOWL_LICK = new SoundEvent(new Identifier(MODID, "item.poison_dart_frog_bowl.lick"));
-    public static SoundEvent ITEM_POISON_DART_COAT = new SoundEvent(new Identifier(MODID, "item.poison_dart.coat"));
-    public static SoundEvent ITEM_POISON_DART_THROW = new SoundEvent(new Identifier(MODID, "item.poison_dart.throw"));
+    public static SoundEvent ENTITY_POISON_DART_FROG_AMBIENT = SoundEvent.of(id("entity.poison_dart_frog.ambient"));
+    public static SoundEvent ENTITY_POISON_DART_FROG_HURT = SoundEvent.of(id("entity.poison_dart_frog.hurt"));
+    public static SoundEvent ENTITY_POISON_DART_FROG_DEATH = SoundEvent.of(id("entity.poison_dart_frog.death"));
+    public static SoundEvent ENTITY_POISON_DART_HIT = SoundEvent.of(id("entity.poison_dart.hit"));
+    public static SoundEvent ITEM_POISON_DART_FROG_BOWL_FILL = SoundEvent.of(id("item.poison_dart_frog_bowl.fill"));
+    public static SoundEvent ITEM_POISON_DART_FROG_BOWL_EMPTY = SoundEvent.of(id("item.poison_dart_frog_bowl.empty"));
+    public static SoundEvent ITEM_POISON_DART_FROG_BOWL_LICK = SoundEvent.of(id("item.poison_dart_frog_bowl.lick"));
+    public static SoundEvent ITEM_POISON_DART_COAT = SoundEvent.of(id("item.poison_dart.coat"));
+    public static SoundEvent ITEM_POISON_DART_THROW = SoundEvent.of(id("item.poison_dart.throw"));
+
+    public static Identifier id(String path) {
+        return new Identifier(MODID, path);
+    }
 
     private static <T extends Entity> EntityType<T> registerEntity(String name, EntityType<T> entityType) {
-        return Registry.register(Registry.ENTITY_TYPE, new Identifier(MODID, name), entityType);
+        return Registry.register(Registries.ENTITY_TYPE, id(name), entityType);
     }
 
     public static <T extends Item> T registerItem(String name, T item) {
-        Registry.register(Registry.ITEM, new Identifier(MODID, name), item);
+        Registry.register(Registries.ITEM, id(name), item);
         return item;
     }
 
     public static Item registerDartItem(String name, Item item) {
-        Registry.register(Registry.ITEM, new Identifier(MODID, name), item);
+        registerItem(name, item);
 
         DispenserBlock.registerBehavior(item, new ProjectileDispenserBehavior() {
             @Override
@@ -121,7 +130,7 @@ public class PickYourPoison implements ModInitializer {
     }
 
     private static <T extends StatusEffect> T registerStatusEffect(String name, T effect) {
-        Registry.register(Registry.STATUS_EFFECT, new Identifier(MODID, name), effect);
+        Registry.register(Registries.STATUS_EFFECT, id(name), effect);
         return effect;
     }
 
@@ -160,34 +169,56 @@ public class PickYourPoison implements ModInitializer {
         POISON_DART = registerEntity("poison_dart", FabricEntityTypeBuilder.<PoisonDartEntity>create(SpawnGroup.MISC, PoisonDartEntity::new).dimensions(EntityDimensions.changing(0.5f, 0.5f)).trackRangeBlocks(4).trackedUpdateRate(20).build());
 
         // ITEMS
-        POISON_DART_FROG_SPAWN_EGG = registerItem("poison_dart_frog_spawn_egg", new SpawnEggItem(POISON_DART_FROG, 0x5BBCF4, 0x22286B, (new Item.Settings()).group(ItemGroup.MISC)));
-        BLUE_POISON_DART_FROG_BOWL = registerItem("blue_poison_dart_frog_bowl", new PoisonDartFrogBowlItem((new Item.Settings()).group(ItemGroup.FOOD).maxCount(1), new Identifier(MODID, "textures/entity/blue.png")));
-        GOLDEN_POISON_DART_FROG_BOWL = registerItem("golden_poison_dart_frog_bowl", new PoisonDartFrogBowlItem((new Item.Settings()).group(ItemGroup.FOOD).maxCount(1), new Identifier(MODID, "textures/entity/golden.png")));
-        GREEN_POISON_DART_FROG_BOWL = registerItem("green_poison_dart_frog_bowl", new PoisonDartFrogBowlItem((new Item.Settings()).group(ItemGroup.FOOD).maxCount(1), new Identifier(MODID, "textures/entity/green.png")));
-        ORANGE_POISON_DART_FROG_BOWL = registerItem("orange_poison_dart_frog_bowl", new PoisonDartFrogBowlItem((new Item.Settings()).group(ItemGroup.FOOD).maxCount(1), new Identifier(MODID, "textures/entity/orange.png")));
-        CRIMSON_POISON_DART_FROG_BOWL = registerItem("crimson_poison_dart_frog_bowl", new PoisonDartFrogBowlItem((new Item.Settings()).group(ItemGroup.FOOD).maxCount(1), new Identifier(MODID, "textures/entity/crimson.png")));
-        RED_POISON_DART_FROG_BOWL = registerItem("red_poison_dart_frog_bowl", new PoisonDartFrogBowlItem((new Item.Settings()).group(ItemGroup.FOOD).maxCount(1), new Identifier(MODID, "textures/entity/red.png")));
-        LUXALAMANDER_BOWL = registerItem("luxalamander_bowl", new PoisonDartFrogBowlItem((new Item.Settings()).group(ItemGroup.FOOD).maxCount(1).rarity(Rarity.RARE), new Identifier(MODID, "textures/entity/luxintrus.png")));
-        RANA_BOWL = registerItem("rana_bowl", new PoisonDartFrogBowlItem((new Item.Settings()).group(ItemGroup.FOOD).maxCount(1).rarity(Rarity.RARE), new Identifier(MODID, "textures/entity/rana.png")));
-        THROWING_DART = registerDartItem("throwing_dart", new ThrowingDartItem((new Item.Settings()).group(ItemGroup.COMBAT).maxCount(64), null));
-        COMATOSE_POISON_DART = registerDartItem("comatose_poison_dart", new ThrowingDartItem((new Item.Settings()).group(ItemGroup.COMBAT).maxCount(1), new StatusEffectInstance(PickYourPoison.COMATOSE, 100))); // 5s
-        BATRACHOTOXIN_POISON_DART = registerDartItem("batrachotoxin_poison_dart", new ThrowingDartItem((new Item.Settings()).group(ItemGroup.COMBAT).maxCount(1), new StatusEffectInstance(PickYourPoison.BATRACHOTOXIN, 80))); // 4s
-        NUMBNESS_POISON_DART = registerDartItem("numbness_poison_dart", new ThrowingDartItem((new Item.Settings()).group(ItemGroup.COMBAT).maxCount(1), new StatusEffectInstance(PickYourPoison.NUMBNESS, 200))); // 10s
-        VULNERABILITY_POISON_DART = registerDartItem("vulnerability_poison_dart", new ThrowingDartItem((new Item.Settings()).group(ItemGroup.COMBAT).maxCount(1), new StatusEffectInstance(PickYourPoison.VULNERABILITY, 200))); // 10s
-        TORPOR_POISON_DART = registerDartItem("torpor_poison_dart", new ThrowingDartItem((new Item.Settings()).group(ItemGroup.COMBAT).maxCount(1), new StatusEffectInstance(PickYourPoison.TORPOR, 200))); // 10s
-        STIMULATION_POISON_DART = registerDartItem("stimulation_poison_dart", new ThrowingDartItem((new Item.Settings()).group(ItemGroup.COMBAT).maxCount(1), new StatusEffectInstance(PickYourPoison.STIMULATION, 600))); // 30s
-        BLINDNESS_POISON_DART = registerDartItem("blindness_poison_dart", new ThrowingDartItem((new Item.Settings()).group(ItemGroup.COMBAT).maxCount(1), new StatusEffectInstance(StatusEffects.BLINDNESS, 200))); // 10s
+        POISON_DART_FROG_SPAWN_EGG = registerItem("poison_dart_frog_spawn_egg", new SpawnEggItem(POISON_DART_FROG, 0x5BBCF4, 0x22286B, (new Item.Settings())));
+        ItemGroupEvents.modifyEntriesEvent(ItemGroups.SPAWN_EGGS).register((entries) -> entries.add(POISON_DART_FROG_SPAWN_EGG));
+
+        BLUE_POISON_DART_FROG_BOWL = registerItem("blue_poison_dart_frog_bowl", new PoisonDartFrogBowlItem((new Item.Settings()).maxCount(1), id("textures/entity/blue.png")));
+        GOLDEN_POISON_DART_FROG_BOWL = registerItem("golden_poison_dart_frog_bowl", new PoisonDartFrogBowlItem((new Item.Settings()).maxCount(1), id("textures/entity/golden.png")));
+        GREEN_POISON_DART_FROG_BOWL = registerItem("green_poison_dart_frog_bowl", new PoisonDartFrogBowlItem((new Item.Settings()).maxCount(1), id("textures/entity/green.png")));
+        ORANGE_POISON_DART_FROG_BOWL = registerItem("orange_poison_dart_frog_bowl", new PoisonDartFrogBowlItem((new Item.Settings()).maxCount(1), id("textures/entity/orange.png")));
+        CRIMSON_POISON_DART_FROG_BOWL = registerItem("crimson_poison_dart_frog_bowl", new PoisonDartFrogBowlItem((new Item.Settings()).maxCount(1), id("textures/entity/crimson.png")));
+        RED_POISON_DART_FROG_BOWL = registerItem("red_poison_dart_frog_bowl", new PoisonDartFrogBowlItem((new Item.Settings()).maxCount(1), id("textures/entity/red.png")));
+        LUXALAMANDER_BOWL = registerItem("luxalamander_bowl", new PoisonDartFrogBowlItem((new Item.Settings()).maxCount(1).rarity(Rarity.RARE), id("textures/entity/luxintrus.png")));
+        RANA_BOWL = registerItem("rana_bowl", new PoisonDartFrogBowlItem((new Item.Settings()).maxCount(1).rarity(Rarity.RARE), id("textures/entity/rana.png")));
+        ItemGroupEvents.modifyEntriesEvent(ItemGroups.FOOD_AND_DRINK).register((entries) -> entries.addAll(Stream.of(
+                BLUE_POISON_DART_FROG_BOWL,
+                GOLDEN_POISON_DART_FROG_BOWL,
+                GREEN_POISON_DART_FROG_BOWL,
+                ORANGE_POISON_DART_FROG_BOWL,
+                CRIMSON_POISON_DART_FROG_BOWL,
+                RED_POISON_DART_FROG_BOWL,
+                LUXALAMANDER_BOWL,
+                RANA_BOWL
+        ).map(Item::getDefaultStack).toList()));
+        THROWING_DART = registerDartItem("throwing_dart", new ThrowingDartItem((new Item.Settings()).maxCount(64), null));
+        COMATOSE_POISON_DART = registerDartItem("comatose_poison_dart", new ThrowingDartItem((new Item.Settings()).maxCount(1), new StatusEffectInstance(PickYourPoison.COMATOSE, 100))); // 5s
+        BATRACHOTOXIN_POISON_DART = registerDartItem("batrachotoxin_poison_dart", new ThrowingDartItem((new Item.Settings()).maxCount(1), new StatusEffectInstance(PickYourPoison.BATRACHOTOXIN, 80))); // 4s
+        NUMBNESS_POISON_DART = registerDartItem("numbness_poison_dart", new ThrowingDartItem((new Item.Settings()).maxCount(1), new StatusEffectInstance(PickYourPoison.NUMBNESS, 200))); // 10s
+        VULNERABILITY_POISON_DART = registerDartItem("vulnerability_poison_dart", new ThrowingDartItem((new Item.Settings()).maxCount(1), new StatusEffectInstance(PickYourPoison.VULNERABILITY, 200))); // 10s
+        TORPOR_POISON_DART = registerDartItem("torpor_poison_dart", new ThrowingDartItem((new Item.Settings()).maxCount(1), new StatusEffectInstance(PickYourPoison.TORPOR, 200))); // 10s
+        STIMULATION_POISON_DART = registerDartItem("stimulation_poison_dart", new ThrowingDartItem((new Item.Settings()).maxCount(1), new StatusEffectInstance(PickYourPoison.STIMULATION, 600))); // 30s
+        BLINDNESS_POISON_DART = registerDartItem("blindness_poison_dart", new ThrowingDartItem((new Item.Settings()).maxCount(1), new StatusEffectInstance(StatusEffects.BLINDNESS, 200))); // 10s
+        ItemGroupEvents.modifyEntriesEvent(ItemGroups.COMBAT).register((entries) -> entries.addAll(Stream.of(
+                THROWING_DART,
+                COMATOSE_POISON_DART,
+                BATRACHOTOXIN_POISON_DART,
+                NUMBNESS_POISON_DART,
+                VULNERABILITY_POISON_DART,
+                TORPOR_POISON_DART,
+                STIMULATION_POISON_DART,
+                BLINDNESS_POISON_DART
+        ).map(Item::getDefaultStack).toList()));
 
         // SOUNDS
-        ENTITY_POISON_DART_FROG_AMBIENT = Registry.register(Registry.SOUND_EVENT, ENTITY_POISON_DART_FROG_AMBIENT.getId(), ENTITY_POISON_DART_FROG_AMBIENT);
-        ENTITY_POISON_DART_FROG_HURT = Registry.register(Registry.SOUND_EVENT, ENTITY_POISON_DART_FROG_HURT.getId(), ENTITY_POISON_DART_FROG_HURT);
-        ENTITY_POISON_DART_FROG_DEATH = Registry.register(Registry.SOUND_EVENT, ENTITY_POISON_DART_FROG_DEATH.getId(), ENTITY_POISON_DART_FROG_DEATH);
-        ENTITY_POISON_DART_HIT = Registry.register(Registry.SOUND_EVENT, ENTITY_POISON_DART_HIT.getId(), ENTITY_POISON_DART_HIT);
-        ITEM_POISON_DART_FROG_BOWL_FILL = Registry.register(Registry.SOUND_EVENT, ITEM_POISON_DART_FROG_BOWL_FILL.getId(), ITEM_POISON_DART_FROG_BOWL_FILL);
-        ITEM_POISON_DART_FROG_BOWL_EMPTY = Registry.register(Registry.SOUND_EVENT, ITEM_POISON_DART_FROG_BOWL_EMPTY.getId(), ITEM_POISON_DART_FROG_BOWL_EMPTY);
-        ITEM_POISON_DART_FROG_BOWL_LICK = Registry.register(Registry.SOUND_EVENT, ITEM_POISON_DART_FROG_BOWL_LICK.getId(), ITEM_POISON_DART_FROG_BOWL_LICK);
-        ITEM_POISON_DART_COAT = Registry.register(Registry.SOUND_EVENT, ITEM_POISON_DART_COAT.getId(), ITEM_POISON_DART_COAT);
-        ITEM_POISON_DART_THROW = Registry.register(Registry.SOUND_EVENT, ITEM_POISON_DART_THROW.getId(), ITEM_POISON_DART_THROW);
+        ENTITY_POISON_DART_FROG_AMBIENT = Registry.register(Registries.SOUND_EVENT, ENTITY_POISON_DART_FROG_AMBIENT.getId(), ENTITY_POISON_DART_FROG_AMBIENT);
+        ENTITY_POISON_DART_FROG_HURT = Registry.register(Registries.SOUND_EVENT, ENTITY_POISON_DART_FROG_HURT.getId(), ENTITY_POISON_DART_FROG_HURT);
+        ENTITY_POISON_DART_FROG_DEATH = Registry.register(Registries.SOUND_EVENT, ENTITY_POISON_DART_FROG_DEATH.getId(), ENTITY_POISON_DART_FROG_DEATH);
+        ENTITY_POISON_DART_HIT = Registry.register(Registries.SOUND_EVENT, ENTITY_POISON_DART_HIT.getId(), ENTITY_POISON_DART_HIT);
+        ITEM_POISON_DART_FROG_BOWL_FILL = Registry.register(Registries.SOUND_EVENT, ITEM_POISON_DART_FROG_BOWL_FILL.getId(), ITEM_POISON_DART_FROG_BOWL_FILL);
+        ITEM_POISON_DART_FROG_BOWL_EMPTY = Registry.register(Registries.SOUND_EVENT, ITEM_POISON_DART_FROG_BOWL_EMPTY.getId(), ITEM_POISON_DART_FROG_BOWL_EMPTY);
+        ITEM_POISON_DART_FROG_BOWL_LICK = Registry.register(Registries.SOUND_EVENT, ITEM_POISON_DART_FROG_BOWL_LICK.getId(), ITEM_POISON_DART_FROG_BOWL_LICK);
+        ITEM_POISON_DART_COAT = Registry.register(Registries.SOUND_EVENT, ITEM_POISON_DART_COAT.getId(), ITEM_POISON_DART_COAT);
+        ITEM_POISON_DART_THROW = Registry.register(Registries.SOUND_EVENT, ITEM_POISON_DART_THROW.getId(), ITEM_POISON_DART_THROW);
 
         // TICK
         ServerTickEvents.END_WORLD_TICK.register(world -> {

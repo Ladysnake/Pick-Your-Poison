@@ -29,9 +29,14 @@
     "fabricloader": ">=0.12.12",
     "fabric": "*",
     "java": ">=17",
-    "geckolib3": "*"
+    "geckolib": "*"
   },
   "custom": {
+    "loom:injected_interfaces": {
+      "net/minecraft/class_8109": [
+        "ladysnake/pickyourpoison/common/damage/DamageSourcesExt"
+      ]
+    },
     "cardinal-components": [
       "pickyourpoison:numbnessdamage",
       "pickyourpoison:frograin"

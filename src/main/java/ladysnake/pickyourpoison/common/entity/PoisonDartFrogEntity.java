@@ -25,10 +25,11 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.tag.BlockTags;
+import net.minecraft.registry.tag.DamageTypeTags;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
-import net.minecraft.tag.BlockTags;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -36,22 +37,24 @@ import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
 import org.jetbrains.annotations.Nullable;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.PlayState;
-import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.controller.AnimationController;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.manager.AnimationData;
-import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.core.animatable.GeoAnimatable;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.AnimationState;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.List;
 
-public class PoisonDartFrogEntity extends AnimalEntity implements IAnimatable {
+public class PoisonDartFrogEntity extends AnimalEntity implements GeoEntity {
     public static final List<Type> NATURAL_TYPES = ImmutableList.of(
             Type.BLUE, Type.GOLDEN, Type.GREEN, Type.ORANGE, Type.CRIMSON, Type.RED
     );
     private static final TrackedData<String> TYPE = DataTracker.registerData(PoisonDartFrogEntity.class, TrackedDataHandlerRegistry.STRING);
-    private final AnimationFactory factory = new AnimationFactory(this);
+    private final AnimatableInstanceCache animationCache = GeckoLibUtil.createInstanceCache(this);
     public int fleeTime = 0;
     public boolean fromBowl = false;
 
@@ -116,24 +119,24 @@ public class PoisonDartFrogEntity extends AnimalEntity implements IAnimatable {
     }
 
     @Override
-    public void registerControllers(AnimationData animationData) {
-        animationData.addAnimationController(new AnimationController<>(this, "controller", 0, this::predicate));
+    public void registerControllers(AnimatableManager.ControllerRegistrar animationData) {
+        animationData.add(new AnimationController<GeoAnimatable>(this, "controller", 0, this::animate));
     }
 
-    private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
+    private <A extends GeoAnimatable> PlayState animate(AnimationState<A> event) {
         if (this.isOnGround()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.poison_dart_frog.idle", true));
+            event.getController().setAnimation(RawAnimation.begin().thenPlay("animation.poison_dart_frog.idle"));
         } else if (this.isTouchingWater()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.poison_dart_frog.swim", true));
+            event.getController().setAnimation(RawAnimation.begin().thenPlay("animation.poison_dart_frog.swim"));
         } else if (this.age > 4) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.poison_dart_frog.jump", true));
+            event.getController().setAnimation(RawAnimation.begin().thenPlay("animation.poison_dart_frog.jump"));
         }
         return PlayState.CONTINUE;
     }
 
     @Override
-    public AnimationFactory getFactory() {
-        return this.factory;
+    public AnimatableInstanceCache getAnimatableInstanceCache() {
+        return this.animationCache;
     }
 
     protected void initDataTracker() {
@@ -211,8 +214,7 @@ public class PoisonDartFrogEntity extends AnimalEntity implements IAnimatable {
 
     @Override
     public boolean damage(DamageSource source, float amount) {
-        if (source.getAttacker() != null && !source.isProjectile() && source.getAttacker() instanceof LivingEntity && getFrogPoisonEffect(this.getPoisonDartFrogType()) != null) {
-            LivingEntity attacker = (LivingEntity) source.getAttacker();
+        if (source.getAttacker() != null && !source.isIn(DamageTypeTags.IS_PROJECTILE) && source.getAttacker() instanceof LivingEntity attacker && getFrogPoisonEffect(this.getPoisonDartFrogType()) != null) {
             attacker.addStatusEffect(getFrogPoisonEffect(this.getPoisonDartFrogType()));
         }
 
@@ -222,14 +224,14 @@ public class PoisonDartFrogEntity extends AnimalEntity implements IAnimatable {
 
     @Override
     protected void fall(double heightDifference, boolean onGround, BlockState landedState, BlockPos landedPosition) {
-        if (!this.world.isClient && onGround && this.fallDistance > 0.0F) {
+        if (!this.getWorld().isClient && onGround && this.fallDistance > 0.0F) {
             this.removeSoulSpeedBoost();
             this.addSoulSpeedBoostIfNeeded();
         }
 
         if (onGround) {
             if (this.fallDistance > 0.0F) {
-                landedState.getBlock().onLandedUpon(this.world, landedState, landedPosition, this, this.fallDistance);
+                landedState.getBlock().onLandedUpon(this.getWorld(), landedState, landedPosition, this, this.fallDistance);
                 if (!landedState.isIn(BlockTags.OCCLUDES_VIBRATION_SIGNALS)) {
                     this.emitGameEvent(GameEvent.HIT_GROUND);
                 }

@@ -113,14 +113,14 @@ public class ThrowingDartItem extends Item {
                 mutableText = Text.translatable("potion.withAmplifier", mutableText, Text.translatable("potion.potency." + statusEffectInstance.getAmplifier()));
             }
             if (statusEffectInstance.getDuration() > 20) {
-                mutableText = Text.translatable("potion.withDuration", mutableText, StatusEffectUtil.durationToString(statusEffectInstance, durationMultiplier));
+                mutableText = Text.translatable("potion.withDuration", mutableText, StatusEffectUtil.getDurationText(statusEffectInstance, durationMultiplier));
             }
             list.add(mutableText.formatted(statusEffect.getCategory().getFormatting()));
         }
         if (!list3.isEmpty()) {
             list.add(Text.of(""));
             list.add(Text.translatable("potion.whenDrank").formatted(Formatting.DARK_PURPLE));
-            for (Pair pair : list3) {
+            for (Pair<EntityAttribute, EntityAttributeModifier> pair : list3) {
                 EntityAttributeModifier entityAttributeModifier3 = (EntityAttributeModifier) pair.getSecond();
                 double d = entityAttributeModifier3.getValue();
                 double e = entityAttributeModifier3.getOperation() == EntityAttributeModifier.Operation.MULTIPLY_BASE || entityAttributeModifier3.getOperation() == EntityAttributeModifier.Operation.MULTIPLY_TOTAL ? entityAttributeModifier3.getValue() * 100.0 : entityAttributeModifier3.getValue();

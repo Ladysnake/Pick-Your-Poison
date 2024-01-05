@@ -2,7 +2,7 @@ package ladysnake.pickyourpoison.mixin;
 
 import ladysnake.pickyourpoison.cca.PickYourPoisonEntityComponents;
 import ladysnake.pickyourpoison.common.PickYourPoison;
-import ladysnake.pickyourpoison.common.damage.PoisonDamageSource;
+import ladysnake.pickyourpoison.common.damage.PoisonDamageSources;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
@@ -21,7 +21,7 @@ public class PlayerEntityFromLivingEntityMixin {
             callbackInfo.cancel();
         }
 
-        if (source != PoisonDamageSource.BACKLASH && livingEntity.hasStatusEffect(PickYourPoison.NUMBNESS) && amount > 0.1f) {
+        if (!source.isOf(PoisonDamageSources.BACKLASH) && livingEntity.hasStatusEffect(PickYourPoison.NUMBNESS) && amount > 0.1f) {
             if (!livingEntity.isInvulnerableTo(source)) {
                 PickYourPoisonEntityComponents.NUMBNESS_DAMAGE.get(this).setDamageAccumulated(PickYourPoisonEntityComponents.NUMBNESS_DAMAGE.get(this).getDamageAccumulated() + amount);
                 callbackInfo.cancel();

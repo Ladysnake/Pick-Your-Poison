@@ -45,10 +45,10 @@ dependencies {
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-	modImplementation 'software.bernie.geckolib:geckolib-fabric-1.19:3.1.0'
+	modImplementation "software.bernie.geckolib:geckolib-fabric-${minecraft_version}:${geckolib_version}"
 
-	modImplementation "io.github.ladysnake:satin:1.8.0"
-	include "io.github.ladysnake:satin:1.8.0"
+	modImplementation "io.github.ladysnake:satin:${satin_version}"
+	include "io.github.ladysnake:satin:${satin_version}"
 
 	// Adds a dependency on the base cardinal components module (required by every other module)
 	// Replace modImplementation with modApi if you expose components in your own API

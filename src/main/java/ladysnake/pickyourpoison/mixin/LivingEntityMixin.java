@@ -2,7 +2,7 @@ package ladysnake.pickyourpoison.mixin;
 
 import ladysnake.pickyourpoison.cca.PickYourPoisonEntityComponents;
 import ladysnake.pickyourpoison.common.PickYourPoison;
-import ladysnake.pickyourpoison.common.damage.PoisonDamageSource;
+import ladysnake.pickyourpoison.common.damage.PoisonDamageSources;
 import ladysnake.pickyourpoison.common.item.PoisonDartFrogBowlItem;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -62,9 +62,6 @@ public abstract class LivingEntityMixin extends Entity {
     public abstract StatusEffectInstance getStatusEffect(StatusEffect effect);
 
     @Shadow
-    public abstract void animateDamage();
-
-    @Shadow
     public abstract boolean damage(DamageSource source, float amount);
 
     @Shadow
@@ -102,7 +99,7 @@ public abstract class LivingEntityMixin extends Entity {
         }
 
         if (this.hasStatusEffect(PickYourPoison.BATRACHOTOXIN) && (this.age % (20 / (MathHelper.clamp(this.getStatusEffect(PickYourPoison.BATRACHOTOXIN).getAmplifier() + 1, 1, 20))) == 0)) {
-            this.damage(PoisonDamageSource.BATRACHOTOXIN, 1);
+            this.damage(getDamageSources().pypSources().batrachotoxin(), 1);
             this.timeUntilRegen = 0;
         }
 
@@ -129,7 +126,7 @@ public abstract class LivingEntityMixin extends Entity {
 
     @Inject(method = "applyDamage", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/entity/LivingEntity;getHealth()F"), cancellable = true)
     private void pickyourpoison$saveFromNumbness(DamageSource source, float amount, CallbackInfo ci) {
-        if (!world.isClient && getHealth() - amount <= 0) {
+        if (!getWorld().isClient && getHealth() - amount <= 0) {
             PickYourPoisonEntityComponents.NUMBNESS_DAMAGE.maybeGet(this).ifPresent(retributionComponent -> {
                 if (retributionComponent.getDamageAccumulated() > 0 && !retributionComponent.isFromLicking()) {
                     this.setHealth(1.0f);
