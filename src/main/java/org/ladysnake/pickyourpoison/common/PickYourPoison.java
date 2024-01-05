@@ -1,11 +1,5 @@
 package org.ladysnake.pickyourpoison.common;
 
-import org.ladysnake.pickyourpoison.common.entity.PoisonDartEntity;
-import org.ladysnake.pickyourpoison.common.entity.PoisonDartFrogEntity;
-import org.ladysnake.pickyourpoison.common.item.PoisonDartFrogBowlItem;
-import org.ladysnake.pickyourpoison.common.item.ThrowingDartItem;
-import org.ladysnake.pickyourpoison.common.statuseffect.EmptyStatusEffect;
-import org.ladysnake.pickyourpoison.common.statuseffect.NumbnessStatusEffect;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
@@ -16,16 +10,21 @@ import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.block.dispenser.ProjectileDispenserBehavior;
-import net.minecraft.entity.*;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityDimensions;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.SpawnGroup;
+import net.minecraft.entity.SpawnRestriction;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemGroups;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SpawnEggItem;
@@ -39,14 +38,24 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Position;
 import net.minecraft.world.Heightmap;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.ladysnake.pickyourpoison.common.entity.PoisonDartEntity;
+import org.ladysnake.pickyourpoison.common.entity.PoisonDartFrogEntity;
+import org.ladysnake.pickyourpoison.common.item.PoisonDartFrogBowlItem;
+import org.ladysnake.pickyourpoison.common.item.ThrowingDartItem;
+import org.ladysnake.pickyourpoison.common.statuseffect.EmptyStatusEffect;
+import org.ladysnake.pickyourpoison.common.statuseffect.NumbnessStatusEffect;
 import software.bernie.geckolib.GeckoLib;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 import java.util.stream.Stream;
 
 public class PickYourPoison implements ModInitializer {
@@ -145,6 +154,13 @@ public class PickYourPoison implements ModInitializer {
                 PickYourPoison.LUXALAMANDER_BOWL,
                 PickYourPoison.RANA_BOWL
         };
+    }
+
+    public static boolean isComatose(@Nullable LivingEntity entity) {
+        return entity != null &&
+                entity.hasStatusEffect(PickYourPoison.COMATOSE) &&
+                !entity.isSpectator() &&
+                !(entity instanceof PlayerEntity player && player.isCreative());
     }
 
     // INIT

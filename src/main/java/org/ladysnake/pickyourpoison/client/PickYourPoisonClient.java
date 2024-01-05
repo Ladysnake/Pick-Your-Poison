@@ -1,9 +1,5 @@
 package org.ladysnake.pickyourpoison.client;
 
-import org.ladysnake.pickyourpoison.client.render.entity.PoisonDartEntityRenderer;
-import org.ladysnake.pickyourpoison.client.render.entity.PoisonDartFrogEntityRenderer;
-import org.ladysnake.pickyourpoison.client.render.model.FrogOnHeadModel;
-import org.ladysnake.pickyourpoison.common.PickYourPoison;
 import ladysnake.satin.api.event.ShaderEffectRenderCallback;
 import ladysnake.satin.api.managed.ManagedShaderEffect;
 import ladysnake.satin.api.managed.ShaderEffectManager;
@@ -13,6 +9,10 @@ import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.Identifier;
 import org.apache.commons.io.IOUtils;
+import org.ladysnake.pickyourpoison.client.render.entity.PoisonDartEntityRenderer;
+import org.ladysnake.pickyourpoison.client.render.entity.PoisonDartFrogEntityRenderer;
+import org.ladysnake.pickyourpoison.client.render.model.FrogOnHeadModel;
+import org.ladysnake.pickyourpoison.common.PickYourPoison;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -39,7 +39,7 @@ public class PickYourPoisonClient implements ClientModInitializer {
 
         // COMA SHADER
         ShaderEffectRenderCallback.EVENT.register(tickDelta -> {
-            if (MinecraftClient.getInstance().player != null && MinecraftClient.getInstance().player.hasStatusEffect(PickYourPoison.COMATOSE) && !MinecraftClient.getInstance().player.isSpectator() && !MinecraftClient.getInstance().player.isCreative() && !MinecraftClient.getInstance().player.isSpectator() && !MinecraftClient.getInstance().player.isCreative()) {
+            if (PickYourPoison.isComatose(MinecraftClient.getInstance().player)) {
                 BLACK_SCREEN.render(tickDelta);
             }
         });

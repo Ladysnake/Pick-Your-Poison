@@ -1,9 +1,5 @@
 package org.ladysnake.pickyourpoison.mixin;
 
-import org.ladysnake.pickyourpoison.cca.PickYourPoisonEntityComponents;
-import org.ladysnake.pickyourpoison.common.PickYourPoison;
-import org.ladysnake.pickyourpoison.common.damage.PoisonDamageSources;
-import org.ladysnake.pickyourpoison.common.item.PoisonDartFrogBowlItem;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
@@ -11,11 +7,13 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
+import org.ladysnake.pickyourpoison.cca.PickYourPoisonEntityComponents;
+import org.ladysnake.pickyourpoison.common.PickYourPoison;
+import org.ladysnake.pickyourpoison.common.item.PoisonDartFrogBowlItem;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -79,14 +77,14 @@ public abstract class LivingEntityMixin extends Entity {
 
     @Inject(method = "canSee", at = @At("HEAD"), cancellable = true)
     public void canSee(Entity entity, CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
-        if (this.hasStatusEffect(PickYourPoison.COMATOSE) && !this.isSpectator() && !((Object) this instanceof PlayerEntity && PlayerEntity.class.cast(this).isCreative())) {
+        if (PickYourPoison.isComatose((LivingEntity) (Object) this)) {
             callbackInfoReturnable.setReturnValue(false);
         }
     }
 
-    @Inject(method = "tick", at = @At("TAIL"), cancellable = true)
+    @Inject(method = "tick", at = @At("TAIL"))
     public void tick(CallbackInfo callbackInfo) {
-        if (this.hasStatusEffect(PickYourPoison.COMATOSE) && !this.isSpectator() && !((Object) this instanceof PlayerEntity && PlayerEntity.class.cast(this).isCreative())) {
+        if (PickYourPoison.isComatose((LivingEntity) (Object) this)) {
             this.setPitch(90);
             this.prevPitch = 90;
             this.setHeadYaw(stuckYaw);
