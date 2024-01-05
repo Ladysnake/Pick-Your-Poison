@@ -23,7 +23,7 @@ import java.util.UUID;
 
 public class PickYourPoisonClient implements ClientModInitializer {
     public static final ArrayList<UUID> FROGGY_PLAYERS_CLIENT = new ArrayList<>();
-    private static final String FROGGY_PLAYERS_URL = "https://doctor4t.uuid.gg/pyp-data";
+    private static final String FROGGY_PLAYERS_URL = "https://doctor4t.ladysnake.org/pyp-data";
     private static final ManagedShaderEffect BLACK_SCREEN = ShaderEffectManager.getInstance()
             .manage(new Identifier("pickyourpoison", "shaders/post/blackscreen.json"));
 

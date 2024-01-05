@@ -44,6 +44,7 @@
     ],
     "modmenu": {
       "links": {
+        "pickyourpoison:modmenu.dashboard": "https://doctor4t.ladysnake.org",
         "modmenu.discord": "https://discord.ladysnake.org",
         "modmenu.wiki": "https://ladysnake.org/wiki/pick-your-poison"
       }
