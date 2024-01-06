@@ -1,12 +1,11 @@
 package org.ladysnake.pickyourpoison.common.entity;
 
 import com.google.common.collect.ImmutableList;
-import org.ladysnake.pickyourpoison.common.PickYourPoison;
-import org.ladysnake.pickyourpoison.common.entity.ai.JumpAroundGoal;
-import org.ladysnake.pickyourpoison.common.entity.ai.PoisonDartFrogWanderAroundFarGoal;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -34,9 +33,14 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
+import net.minecraft.world.LocalDifficulty;
+import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
 import org.jetbrains.annotations.Nullable;
+import org.ladysnake.pickyourpoison.common.PickYourPoison;
+import org.ladysnake.pickyourpoison.common.entity.ai.JumpAroundGoal;
+import org.ladysnake.pickyourpoison.common.entity.ai.PoisonDartFrogWanderAroundFarGoal;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.GeoAnimatable;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -63,6 +67,17 @@ public class PoisonDartFrogEntity extends AnimalEntity implements GeoEntity {
 
     public PoisonDartFrogEntity(EntityType<? extends AnimalEntity> entityType, World world) {
         super(entityType, world);
+    }
+
+    @Override
+    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt) {
+        if (this.random.nextInt(100) == 0) {
+            this.setPoisonDartFrogType(Type.LUXINTRUS);
+        } else {
+            this.setPoisonDartFrogType(getRandomNaturalType(random));
+        }
+
+        return super.initialize(world, difficulty, spawnReason, entityData, entityNbt);
     }
 
     public static Type getRandomNaturalType(Random random) {
@@ -145,11 +160,7 @@ public class PoisonDartFrogEntity extends AnimalEntity implements GeoEntity {
     protected void initDataTracker() {
         super.initDataTracker();
 
-        if (this.random.nextInt(100) == 0) {
-            this.dataTracker.startTracking(TYPE, Type.LUXINTRUS.toString());
-        } else {
-            this.dataTracker.startTracking(TYPE, getRandomNaturalType(random).toString());
-        }
+        this.dataTracker.startTracking(TYPE, Type.BLUE.toString());
     }
 
     @Override
