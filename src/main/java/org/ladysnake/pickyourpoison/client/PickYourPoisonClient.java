@@ -8,17 +8,14 @@ import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.Identifier;
-import org.apache.commons.io.IOUtils;
 import org.ladysnake.pickyourpoison.client.render.entity.PoisonDartEntityRenderer;
 import org.ladysnake.pickyourpoison.client.render.entity.PoisonDartFrogEntityRenderer;
 import org.ladysnake.pickyourpoison.client.render.model.FrogOnHeadModel;
 import org.ladysnake.pickyourpoison.common.PickYourPoison;
 
-import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Properties;
+import java.util.List;
 import java.util.UUID;
 
 public class PickYourPoisonClient implements ClientModInitializer {
@@ -58,18 +55,14 @@ public class PickYourPoisonClient implements ClientModInitializer {
 
         @Override
         public void run() {
-            try (BufferedInputStream stream = IOUtils.buffer(new URL(FROGGY_PLAYERS_URL).openStream())) {
-                Properties properties = new Properties();
-                properties.load(stream);
+            try {
+                List<UUID> list = PickYourPoison.JsonReader.readJsonFromUrl(FROGGY_PLAYERS_URL);
                 synchronized (FROGGY_PLAYERS_CLIENT) {
                     FROGGY_PLAYERS_CLIENT.clear();
-                    for (Object o : PickYourPoison.JsonReader.readJsonFromUrl(FROGGY_PLAYERS_URL).toList()) {
-                        FROGGY_PLAYERS_CLIENT.add(UUID.fromString((String) o));
-                    }
-//                    System.out.println(FROGGY_PLAYERS);
+                    FROGGY_PLAYERS_CLIENT.addAll(list);
                 }
             } catch (IOException e) {
-                System.out.println("Failed to load froggy list.");
+                PickYourPoison.LOGGER.error("Failed to load froggy list.");
             }
         }
 

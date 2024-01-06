@@ -59,9 +59,6 @@ dependencies {
 	include "dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${cca_version}"
 
 	modImplementation "dev.emi:trinkets:${trinkets_version}"
-
-	implementation 'org.json:json:20211205'
-	include 'org.json:json:20211205'
 }
 
 processResources {
