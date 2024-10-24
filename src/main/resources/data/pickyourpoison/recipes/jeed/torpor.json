@@ -1,0 +1,14 @@
+{
+  "type": "jeed:effect_provider",
+  "effect":{
+    "id": "pickyourpoison:torpor"
+  },
+  "providers": [
+    {
+      "item": "pickyourpoison:torpor_poison_dart"
+    },
+    {
+      "item": "pickyourpoison:crimson_poison_dart_frog_bowl"
+    }
+  ]
+}

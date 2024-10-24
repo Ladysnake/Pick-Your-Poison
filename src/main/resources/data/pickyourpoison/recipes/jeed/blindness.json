@@ -1,0 +1,14 @@
+{
+  "type": "jeed:effect_provider",
+  "effect":{
+    "id": "minecraft:blindness"
+  },
+  "providers": [
+    {
+      "item": "pickyourpoison:blindness_poison_dart"
+    },
+    {
+      "item": "pickyourpoison:luxalamander_bowl"
+    }
+  ]
+}

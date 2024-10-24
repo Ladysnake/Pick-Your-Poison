@@ -1,0 +1,14 @@
+{
+  "type": "jeed:effect_provider",
+  "effect":{
+    "id": "pickyourpoison:stimulation"
+  },
+  "providers": [
+    {
+      "item": "pickyourpoison:stimulation_poison_dart"
+    },
+    {
+      "item": "pickyourpoison:red_poison_dart_frog_bowl"
+    }
+  ]
+}

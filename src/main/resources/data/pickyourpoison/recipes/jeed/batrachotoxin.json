@@ -1,0 +1,14 @@
+{
+  "type": "jeed:effect_provider",
+  "effect":{
+    "id": "pickyourpoison:batrachotoxin"
+  },
+  "providers": [
+    {
+      "item": "pickyourpoison:batrachotoxin_poison_dart"
+    },
+    {
+      "item": "pickyourpoison:golden_poison_dart_frog_bowl"
+    }
+  ]
+}
