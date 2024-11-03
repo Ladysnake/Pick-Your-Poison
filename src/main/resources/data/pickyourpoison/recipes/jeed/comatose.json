@@ -1,0 +1,14 @@
+{
+  "type": "jeed:effect_provider",
+  "effect":{
+    "id": "pickyourpoison:comatose"
+  },
+  "providers": [
+    {
+      "item": "pickyourpoison:comatose_poison_dart"
+    },
+    {
+      "item": "pickyourpoison:blue_poison_dart_frog_bowl"
+    }
+  ]
+}

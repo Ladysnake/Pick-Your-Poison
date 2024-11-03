@@ -1,0 +1,14 @@
+{
+  "type": "jeed:effect_provider",
+  "effect":{
+    "id": "pickyourpoison:numbness"
+  },
+  "providers": [
+    {
+      "item": "pickyourpoison:numbness_poison_dart"
+    },
+    {
+      "item": "pickyourpoison:green_poison_dart_frog_bowl"
+    }
+  ]
+}
